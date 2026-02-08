@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Themes — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html" class="active">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Themes</h1>
+      <p class="subtitle">Six built-in themes to match your vibe. Switch instantly in Settings → Display.</p>
+
+      <h2>Built-in Themes</h2>
+      <p>Uplink ships with six themes, each with a distinct personality. Themes control background colors, accent colors, text colors, chat bubble styling, and the overall feel of the interface.</p>
+
+      <div class="theme-grid">
+        <div class="theme-card">
+          <div class="theme-preview" style="background: linear-gradient(135deg, #0a0a1a 0%, #0d1b2a 100%);">
+            <span class="swatch" style="background: #00f0ff;"></span>
+            <span class="swatch" style="background: #0a0a1a;"></span>
+            <span class="swatch" style="background: #e2e8f0;"></span>
+          </div>
+          <div class="theme-info">
+            <h4>Midnight</h4>
+            <p>Default theme. Dark background with cyan accents. The signature Uplink look.</p>
+          </div>
+        </div>
+
+        <div class="theme-card">
+          <div class="theme-preview" style="background: linear-gradient(135deg, #000 0%, #1a0a14 100%);">
+            <span class="swatch" style="background: #f472b6;"></span>
+            <span class="swatch" style="background: #000;"></span>
+            <span class="swatch" style="background: #fce7f3;"></span>
+          </div>
+          <div class="theme-info">
+            <h4>Sakura</h4>
+            <p>Pink-toned dark theme. Soft, warm, inspired by cherry blossoms.</p>
+          </div>
+        </div>
+
+        <div class="theme-card">
+          <div class="theme-preview" style="background: linear-gradient(135deg, #1a0f00 0%, #2d1a06 100%);">
+            <span class="swatch" style="background: #f97316;"></span>
+            <span class="swatch" style="background: #1a0f00;"></span>
+            <span class="swatch" style="background: #fed7aa;"></span>
+          </div>
+          <div class="theme-info">
+            <h4>Ember</h4>
+            <p>Warm orange accents on dark. Energetic and bold.</p>
+          </div>
+        </div>
+
+        <div class="theme-card">
+          <div class="theme-preview" style="background: linear-gradient(135deg, #0a1a0f 0%, #0d2818 100%);">
+            <span class="swatch" style="background: #22c55e;"></span>
+            <span class="swatch" style="background: #0a1a0f;"></span>
+            <span class="swatch" style="background: #bbf7d0;"></span>
+          </div>
+          <div class="theme-info">
+            <h4>Forest</h4>
+            <p>Green-tinted dark theme. Calm, focused, terminal-inspired.</p>
+          </div>
+        </div>
+
+        <div class="theme-card">
+          <div class="theme-preview" style="background: linear-gradient(135deg, #f8f5f1 0%, #f0ebe3 100%);">
+            <span class="swatch" style="background: #c84b4b;"></span>
+            <span class="swatch" style="background: #f8f5f1;"></span>
+            <span class="swatch" style="background: #1a1a1a;"></span>
+          </div>
+          <div class="theme-info">
+            <h4>Daylight</h4>
+            <p>The only light theme. Warm cream background with washed red accents. Easy on the eyes during the day.</p>
+          </div>
+        </div>
+
+        <div class="theme-card">
+          <div class="theme-preview" style="background: linear-gradient(135deg, #000 0%, #111 100%);">
+            <span class="swatch" style="background: #64748b;"></span>
+            <span class="swatch" style="background: #0f172a;"></span>
+            <span class="swatch" style="background: #cbd5e1;"></span>
+          </div>
+          <div class="theme-info">
+            <h4>Phantom</h4>
+            <p>Dark and muted. Subtle slate tones with no flashy accents. Maximum focus.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>Switching Themes</h2>
+      <p>Open Settings → Display and click any theme to apply it instantly. The change is immediate — no page reload needed. Your theme preference is saved and persists across sessions and devices.</p>
+
+      <h2>Theme Details</h2>
+      <p>Each theme controls the following UI elements:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Element</th><th>What Changes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Background</strong></td><td>Main app background and sidebar color</td></tr>
+            <tr><td><strong>Accent</strong></td><td>Buttons, links, active states, user chat bubble</td></tr>
+            <tr><td><strong>Text</strong></td><td>Primary and muted text colors</td></tr>
+            <tr><td><strong>Chat Bubbles</strong></td><td>User and AI message backgrounds</td></tr>
+            <tr><td><strong>Code Blocks</strong></td><td>Background, border, and syntax highlight colors</td></tr>
+            <tr><td><strong>Borders</strong></td><td>Dividers, card borders, input outlines</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Color Reference</h2>
+      <p>For developers and anyone curious, here are the exact accent colors used by each theme:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Theme</th><th>Background</th><th>Accent</th><th>Text</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Midnight</strong></td><td><code>#000</code></td><td><code>#00f0ff</code> (Cyan)</td><td><code>#f1f5f9</code></td></tr>
+            <tr><td><strong>Daylight</strong></td><td><code>#f8f5f1</code></td><td><code>#c84b4b</code> (Washed Red)</td><td><code>#1a1a1a</code></td></tr>
+            <tr><td><strong>Ember</strong></td><td><code>#000</code></td><td><code>#f97316</code> (Orange)</td><td><code>#fed7aa</code></td></tr>
+            <tr><td><strong>Forest</strong></td><td><code>#000</code></td><td><code>#22c55e</code> (Green)</td><td><code>#bbf7d0</code></td></tr>
+            <tr><td><strong>Sakura</strong></td><td><code>#000</code></td><td><code>#f472b6</code> (Pink)</td><td><code>#fce7f3</code></td></tr>
+            <tr><td><strong>Phantom</strong></td><td><code>#000</code></td><td><code>#64748b</code> (Slate)</td><td><code>#cbd5e1</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <strong>💡 Custom Themes</strong>
+        Custom theme support is planned for a future release. In the meantime, you can modify the CSS custom properties in the app source to create your own look.
+      </div>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

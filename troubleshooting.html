@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Troubleshooting — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html" class="active">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Troubleshooting</h1>
+      <p class="subtitle">Common issues and how to fix them. Can't find your problem? Open an issue on GitHub.</p>
+
+      <h2>Server Won't Start</h2>
+
+      <h3>Port Already in Use</h3>
+      <p>If you see <code>Error: EADDRINUSE :::3456</code>, another process is using port 3456.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Find what's using the port
+# Windows:
+netstat -ano | findstr :3456
+
+# macOS/Linux:
+lsof -i :3456
+
+# Option 1: Kill the conflicting process
+# Option 2: Use a different port
+PORT=3457 node server.js</code></pre>
+      </div>
+
+      <h3>Node.js Version Too Old</h3>
+      <p>Uplink requires Node.js v18 or later. Check your version:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>node --version
+# If below v18, update from https://nodejs.org</code></pre>
+      </div>
+
+      <h3>Missing Dependencies</h3>
+      <p>If you see <code>MODULE_NOT_FOUND</code> errors, your <code>node_modules</code> may be incomplete:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Delete and reinstall dependencies
+rm -rf node_modules
+npm install</code></pre>
+      </div>
+
+      <h2>Messages Not Working</h2>
+
+      <h3>Gateway Connection Failed</h3>
+      <p>If the UI loads but messages fail with a connection error, Uplink can't reach the OpenClaw gateway.</p>
+      <ul>
+        <li>Check that OpenClaw is running: <code>openclaw gateway status</code></li>
+        <li>Verify the Gateway URL in Settings → General matches your OpenClaw setup</li>
+        <li>Default gateway URL is usually <code>http://localhost:5001/v1</code></li>
+        <li>Try opening the gateway URL in your browser — you should see a JSON response</li>
+      </ul>
+
+      <h3>Slow or Hanging Responses</h3>
+      <p>If messages take a very long time or seem to hang:</p>
+      <ul>
+        <li>The AI model may be loading — first message after startup is always slower</li>
+        <li>Check your model's resource requirements vs. your hardware</li>
+        <li>Open the browser's developer console (F12) to see if there are WebSocket errors</li>
+        <li>Try reducing the context window or switching to a smaller model</li>
+      </ul>
+
+      <h2>Voice Chat Issues</h2>
+
+      <h3>TTS Not Working</h3>
+      <p>If you don't hear voice responses:</p>
+      <ol>
+        <li>Check Settings → Voice to confirm a TTS engine is selected</li>
+        <li>If using Edge TTS: Make sure you have internet access</li>
+        <li>If using XTTS: Verify the XTTS server is running and the URL is correct</li>
+        <li>If using OpenAI TTS: Verify your API key is valid</li>
+        <li>Check browser audio permissions — Uplink needs permission to play audio</li>
+      </ol>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Test your XTTS server directly
+curl http://localhost:5002/api/tts -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello", "language": "en"}' \
+  --output test.wav
+
+# If this fails, the issue is with your XTTS server, not Uplink</code></pre>
+      </div>
+
+      <h3>STT Not Working (Microphone)</h3>
+      <p>If voice input doesn't transcribe:</p>
+      <ul>
+        <li>Check browser microphone permissions — the browser must allow access</li>
+        <li>If using faster-whisper: Verify the server is running and URL is correct in Settings → Voice</li>
+        <li>If using browser native STT: Try Chrome — it has the best Web Speech API support</li>
+        <li>On mobile: Make sure the PWA has microphone permissions in your device settings</li>
+      </ul>
+
+      <h3>Voice Latency Too High</h3>
+      <p>If there's a long delay between speaking and hearing a response:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Bottleneck</th><th>Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>STT too slow</td><td>Use a smaller Whisper model (tiny or base instead of medium)</td></tr>
+            <tr><td>AI response slow</td><td>Use a faster/smaller model, or check GPU utilization</td></tr>
+            <tr><td>TTS too slow</td><td>Switch from XTTS to Edge TTS, or use a GPU with more VRAM</td></tr>
+            <tr><td>Network latency</td><td>If using cloud TTS, latency depends on your internet speed</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Remote Access Issues</h2>
+
+      <h3>Can't Connect from Another Device</h3>
+      <p>If other devices on your network can't reach Uplink:</p>
+      <ol>
+        <li>Verify both devices are on the same Wi-Fi / LAN</li>
+        <li>Check your firewall (see <a href="remote-access.html">Remote Access</a>)</li>
+        <li>Try using the IP address directly — not hostname</li>
+        <li>Make sure you're using port 3456 (or whatever port Uplink is running on)</li>
+      </ol>
+
+      <h3>WebSocket Disconnections</h3>
+      <p>If conversations stop syncing or the UI shows "disconnected":</p>
+      <ul>
+        <li>Refresh the page — WebSocket will reconnect automatically</li>
+        <li>If using Tailscale, check that the VPN tunnel is active</li>
+        <li>Unstable Wi-Fi can cause frequent disconnects — try a wired connection</li>
+      </ul>
+
+      <h2>Encryption Issues</h2>
+
+      <h3>Forgot Encryption Password</h3>
+      <p>If you enabled encryption and forgot your password, <strong>your conversations cannot be recovered</strong>. This is by design — zero-knowledge encryption means the server cannot decrypt your data.</p>
+      <p>Your options:</p>
+      <ul>
+        <li>If you have a backup of the database from before encryption, restore it</li>
+        <li>Reset the database and start fresh (you'll lose all encrypted conversations)</li>
+      </ul>
+
+      <div class="callout warning">
+        <strong>⚠ No Recovery</strong>
+        Uplink's encryption is intentionally unrecoverable without the password. Store your password in a password manager.
+      </div>
+
+      <h2>Browser Compatibility</h2>
+      <p>Uplink works in all modern browsers. Known quirks:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Browser</th><th>Status</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Chrome / Edge</strong></td><td>✅ Full support</td><td>Best Web Speech API for native STT</td></tr>
+            <tr><td><strong>Firefox</strong></td><td>✅ Full support</td><td>No native STT — use faster-whisper instead</td></tr>
+            <tr><td><strong>Safari</strong></td><td>✅ Full support</td><td>PWA works on iOS 16.4+</td></tr>
+            <tr><td><strong>Mobile Chrome</strong></td><td>✅ Full support</td><td>Best mobile experience as PWA</td></tr>
+            <tr><td><strong>Mobile Safari</strong></td><td>✅ Full support</td><td>Add to Home Screen for PWA</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Getting Help</h2>
+      <p>If none of the above resolves your issue:</p>
+      <ol>
+        <li>Check the browser console (F12 → Console) for error messages</li>
+        <li>Check the Node.js terminal output for server-side errors</li>
+        <li>Open an issue on <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a> with:
+          <ul>
+            <li>Your OS and Node.js version</li>
+            <li>Steps to reproduce the issue</li>
+            <li>Any error messages from the browser console or server terminal</li>
+          </ul>
+        </li>
+        <li>Join the <a href="https://discord.gg/mooncompany" target="_blank">Discord server</a> for community support</li>
+      </ol>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

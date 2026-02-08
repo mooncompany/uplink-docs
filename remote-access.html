@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Access — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="remote-access.html" class="active">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Remote Access</h1>
+      <p class="subtitle">Access your Uplink instance from any device — phone, tablet, or another computer.</p>
+
+      <h2>How It Works</h2>
+      <p>Uplink is a web server. By default it listens on <code>localhost:3456</code>, which means only the machine running it can access the UI. To use Uplink from other devices, you need to either access it over your local network (LAN) or set up a secure tunnel for remote access.</p>
+
+      <h2>LAN Access</h2>
+      <p>The simplest option. If your phone/tablet/laptop is on the same Wi-Fi network as the machine running Uplink, you can access it directly via the host's LAN IP.</p>
+
+      <h3>Find Your LAN IP</h3>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>Windows PowerShell</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>ipconfig | findstr "IPv4"
+# Example output: IPv4 Address. . . : 192.168.1.100</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>macOS / Linux</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>hostname -I  # Linux
+ipconfig getifaddr en0  # macOS
+# Example output: 192.168.1.100</code></pre>
+      </div>
+
+      <h3>Connect from Another Device</h3>
+      <p>Open a browser on your phone or other device and navigate to:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>url</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>http://192.168.1.100:3456</code></pre>
+      </div>
+
+      <p>Replace the IP with your actual LAN address. That's it — you'll see the full Uplink interface. Conversations sync in real-time via WebSocket.</p>
+
+      <div class="callout">
+        <strong>📱 PWA Tip</strong>
+        On mobile, use your browser's "Add to Home Screen" option to install Uplink as a Progressive Web App. It'll look and feel like a native app — full screen, no browser chrome.
+      </div>
+
+      <h2>Tailscale (Recommended for Remote)</h2>
+      <p>For accessing Uplink outside your home network, <a href="https://tailscale.com" target="_blank">Tailscale</a> is the recommended approach. It creates a secure mesh VPN between your devices with zero configuration — no port forwarding, no dynamic DNS, no firewall rules.</p>
+
+      <h3>Setup</h3>
+      <ol>
+        <li>Install Tailscale on the machine running Uplink</li>
+        <li>Install Tailscale on your phone/laptop/remote device</li>
+        <li>Sign in with the same account on both devices</li>
+        <li>Access Uplink using the Tailscale IP (usually <code>100.x.y.z:3456</code>)</li>
+      </ol>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Check your Tailscale IP
+tailscale ip -4
+# Example: 100.64.0.1
+
+# Access Uplink from any Tailscale-connected device:
+# http://100.64.0.1:3456</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Pros</th><th>Cons</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>LAN IP</strong></td><td>Zero setup, instant</td><td>Same network only, IP may change</td></tr>
+            <tr><td><strong>Tailscale</strong></td><td>Works anywhere, encrypted, stable IP</td><td>Requires Tailscale on both devices</td></tr>
+            <tr><td><strong>Port forwarding</strong></td><td>Works from internet</td><td>Security risk, complex, ISP may block</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Firewall Notes</h2>
+      <p>If devices on your LAN can't connect, your firewall may be blocking port 3456. Here's how to allow it:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>Windows PowerShell (Admin)</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>New-NetFirewallRule -DisplayName "Uplink" -Direction Inbound -Port 3456 -Protocol TCP -Action Allow</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>Linux (ufw)</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>sudo ufw allow 3456/tcp</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <strong>⚠ Security Warning</strong>
+        Never expose Uplink directly to the public internet via port forwarding. It's designed for trusted networks. If you need internet access from anywhere, use Tailscale or another VPN. Uplink does not have built-in authentication for the web UI (encryption protects message content, not access).
+      </div>
+
+      <h2>Multi-Device Sync</h2>
+      <p>All devices connected to the same Uplink server share conversations in real-time. When you send a message from your phone, it appears instantly on your desktop — and vice versa. This is handled automatically via WebSocket; no additional configuration needed.</p>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

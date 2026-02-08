@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html" class="active">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Features Overview</h1>
+      <p class="subtitle">Everything Uplink can do — and why it does it on your terms.</p>
+
+      <h2>Local-First Architecture</h2>
+      <p>Uplink runs as a Node.js server on <code>localhost:3456</code>. Your conversations, settings, and data live on your machine. The AI connection goes through the OpenClaw gateway — an OpenAI-compatible API running locally — so your prompts and responses never touch third-party servers unless you explicitly configure an external endpoint.</p>
+      <p>When your internet goes down, Uplink keeps serving. The web UI, settings, and conversation history are all local. Only the AI inference requires a working gateway connection.</p>
+
+      <h2>Text Chat</h2>
+      <p>The core experience. A clean, responsive chat interface in your browser. Features include:</p>
+      <ul>
+        <li><strong>Streaming responses</strong> — Tokens appear in real-time as the AI generates them</li>
+        <li><strong>Markdown rendering</strong> — Code blocks, tables, lists, and inline formatting</li>
+        <li><strong>Conversation history</strong> — All chats are persisted and searchable</li>
+        <li><strong>System prompts</strong> — Set per-conversation or global personality/instructions</li>
+        <li><strong>Multi-device sync</strong> — Open the same Uplink instance from any device on your network</li>
+      </ul>
+
+      <h2>Voice Chat</h2>
+      <p>Talk to your AI instead of typing. Uplink supports multiple TTS and STT engines — from free cloud services to fully local GPU-accelerated models. See the <a href="voice-chat.html">Voice Chat</a> page for full details.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Engine</th><th>Type</th><th>Runs Where</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Edge TTS</strong></td><td>Text-to-Speech</td><td>Cloud (free)</td><td>Microsoft's free TTS API, many voices</td></tr>
+            <tr><td><strong>OpenAI TTS</strong></td><td>Text-to-Speech</td><td>Cloud (paid)</td><td>High quality, requires API key</td></tr>
+            <tr><td><strong>Coqui XTTS</strong></td><td>Text-to-Speech</td><td>Local (GPU)</td><td>Best quality, needs NVIDIA GPU</td></tr>
+            <tr><td><strong>faster-whisper</strong></td><td>Speech-to-Text</td><td>Local</td><td>Fast, accurate, runs on CPU or GPU</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>End-to-End Encryption</h2>
+      <p>Uplink supports optional AES-256 encryption for all conversations. Enable it on first run or later in Settings → Security. When enabled:</p>
+      <ul>
+        <li>All messages are encrypted at rest on the server</li>
+        <li>Your encryption password never leaves your browser</li>
+        <li>Zero-knowledge design — the server cannot read your messages</li>
+        <li>If you forget your password, conversations are unrecoverable (by design)</li>
+      </ul>
+
+      <div class="callout">
+        <strong>ℹ How It Works</strong>
+        Your password is used to derive an AES-256 key via PBKDF2 in the browser. Messages are encrypted client-side before being sent to the server. The server only ever sees ciphertext.
+      </div>
+
+      <h2>Themes</h2>
+      <p>Six built-in themes to match your vibe. Switch instantly in Settings → Display. See the <a href="themes.html">Themes</a> page for previews.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Theme</th><th>Accent Color</th><th>Style</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Deep Space</strong></td><td>Cyan (#00f0ff)</td><td>Dark — the default</td></tr>
+            <tr><td><strong>Nebula</strong></td><td>Purple (#8b5cf6)</td><td>Dark</td></tr>
+            <tr><td><strong>Solar Flare</strong></td><td>Orange (#f97316)</td><td>Dark</td></tr>
+            <tr><td><strong>Aurora</strong></td><td>Green (#22c55e)</td><td>Dark</td></tr>
+            <tr><td><strong>Daylight Cream</strong></td><td>Blue (#3b82f6)</td><td>Light</td></tr>
+            <tr><td><strong>Midnight</strong></td><td>Slate (#64748b)</td><td>Dark, muted</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>PWA Support</h2>
+      <p>Uplink is a Progressive Web App. On mobile, add it to your home screen for a native-app experience — full-screen, no browser chrome, offline-capable UI. Works on both iOS Safari and Android Chrome.</p>
+
+      <h2>Multi-Device Access</h2>
+      <p>Since Uplink is a web server, any device on your network can access it by navigating to the server's IP and port. Conversations sync in real-time via WebSocket. Use it on your desktop, laptop, phone, and tablet simultaneously.</p>
+      <p>For access outside your home network, see <a href="remote-access.html">Remote Access</a>.</p>
+
+      <h2>OpenAI-Compatible API</h2>
+      <p>Uplink connects to AI through the <strong>OpenClaw gateway</strong>, which provides an OpenAI-compatible API. This is the tested and supported configuration.</p>
+      
+      <div class="callout">
+        <strong>💡 Other providers (untested)</strong>
+        In theory, you could point Uplink at any OpenAI-compatible endpoint — llama.cpp server, LM Studio, text-generation-webui, or the official OpenAI API. The API format is standard. However, this hasn't been tested and some features (like streaming, voice chat, or session management) may not work as expected without OpenClaw. If you try it, let us know how it goes!
+      </div>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

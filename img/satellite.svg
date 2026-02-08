@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <g transform="rotate(-45 12 12)">
+    <!-- Satellite dish (clean parabolic) -->
+    <path d="M8.5 6.5 Q8.5 3.5 12 2.5 Q15.5 3.5 15.5 6.5 Q14 5.5 12 5.5 Q10 5.5 8.5 6.5 Z"/>
+    
+    <!-- Dish feed/stem -->
+    <rect x="11.2" y="5.5" width="1.6" height="2.5"/>
+    
+    <!-- Central body -->
+    <rect x="10.2" y="8" width="3.6" height="3" rx="0.5"/>
+    
+    <!-- Left connector arm -->
+    <rect x="7" y="8.8" width="3.2" height="1.4"/>
+    
+    <!-- Right connector arm -->
+    <rect x="13.8" y="8.8" width="3.2" height="1.4"/>
+    
+    <!-- Left solar panel -->
+    <rect x="1.5" y="7.5" width="5.5" height="4" rx="0.3"/>
+    
+    <!-- Right solar panel -->
+    <rect x="17" y="7.5" width="5.5" height="4" rx="0.3"/>
+    
+    <!-- Signal wave 1 (closest to dish) -->
+    <path d="M9.5 4.5 A3 3 0 0 1 7.5 2.5 A3.8 3.8 0 0 0 8.5 3.8 Z"/>
+    
+    <!-- Signal wave 2 (middle) -->
+    <path d="M8.5 5.5 A5 5 0 0 1 6 1.5 A5.8 5.8 0 0 0 7.5 4.5 Z"/>
+    
+    <!-- Signal wave 3 (outermost) -->
+    <path d="M7.5 6.5 A7 7 0 0 1 4.5 0.5 A7.8 7.8 0 0 0 6.5 5.5 Z"/>
+  </g>
+</svg>

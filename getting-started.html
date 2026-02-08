@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html" class="active">Installation</a>
+        <a href="configuration.html">Configuration</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Getting Started</h1>
+      <p class="subtitle">Install Uplink and have your local AI chat running in under 5 minutes.</p>
+
+      <h2>What is Uplink?</h2>
+      <p>Uplink is a local-first AI chat application that runs as a Node.js web server on your machine. It connects to AI models through the OpenClaw gateway (an OpenAI-compatible API) and provides a polished chat interface accessible from any browser. Text chat, voice chat, themes, encryption — all in one self-hosted package.</p>
+
+      <h2>System Requirements</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Node.js</td><td>v18+</td><td>v20 LTS or later</td></tr>
+            <tr><td>OS</td><td>Windows 10 / macOS 12 / Ubuntu 20.04</td><td>Latest stable release</td></tr>
+            <tr><td>RAM</td><td>4 GB</td><td>8 GB+</td></tr>
+            <tr><td>GPU</td><td>Not required</td><td>NVIDIA GPU (for local TTS with Coqui XTTS)</td></tr>
+            <tr><td>Network</td><td>LAN access</td><td>Tailscale for remote access</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Installation</h2>
+      <p>Uplink is installed by cloning the repository and running <code>npm install</code>. No build tools, no Docker, no complex setup.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>git clone https://github.com/mooncompany/uplink.git
+cd uplink
+npm install</code></pre>
+      </div>
+
+      <p>That's it. All dependencies are pulled in by npm. No native compilation required for the core app.</p>
+
+      <h2>Starting the Server</h2>
+      <p>Launch Uplink with a single command. It starts a web server on <code>localhost:3456</code> by default.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>node server.js</code></pre>
+      </div>
+
+      <p>You'll see output like:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>output</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>✓ Uplink running at http://localhost:3456
+✓ WebSocket server ready
+✓ OpenClaw gateway connected</code></pre>
+      </div>
+
+      <p>Open <code>http://localhost:3456</code> in your browser and you're in.</p>
+
+      <h2>First Run Setup</h2>
+      <p>On first launch, Uplink will prompt you to configure a few things:</p>
+      <ol>
+        <li><strong>Encryption password</strong> — Optional. If set, all conversations are encrypted with AES-256. You can skip this and enable it later in Settings → Security.</li>
+        <li><strong>AI connection</strong> — Uplink connects to AI via the OpenClaw gateway, which provides an OpenAI-compatible API. The gateway URL is configured automatically if OpenClaw is running.</li>
+        <li><strong>Theme</strong> — Pick from 6 built-in themes. Default is Deep Space (cyan on dark). You can change this anytime in Settings → Display.</li>
+      </ol>
+
+      <div class="callout">
+        <strong>💡 Tip</strong>
+        Uplink is a PWA (Progressive Web App). On mobile browsers, use "Add to Home Screen" from the share menu for an app-like experience. Works on both iOS and Android.
+      </div>
+
+      <h2>Quick Verify</h2>
+      <p>To verify everything is working, open the app in your browser, type a message, and confirm you get a response from the AI. If you see an error about the gateway connection, check that OpenClaw is running and accessible.</p>
+
+      <div class="callout warning">
+        <strong>⚠ Common Issue</strong>
+        If the page loads but messages fail, make sure the OpenClaw gateway is running and the API endpoint is reachable from your machine. Check Settings → General for the gateway URL.
+      </div>
+
+      <h2>Next Steps</h2>
+      <ul>
+        <li><a href="configuration.html">Configuration</a> — Customize the Settings panel and environment</li>
+        <li><a href="voice-chat.html">Voice Chat</a> — Enable speech-to-text and text-to-speech</li>
+        <li><a href="remote-access.html">Remote Access</a> — Access Uplink from other devices</li>
+        <li><a href="themes.html">Themes</a> — Browse the 6 built-in themes</li>
+      </ul>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

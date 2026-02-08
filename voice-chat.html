@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Chat — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html" class="active">Voice Chat</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Voice Chat</h1>
+      <p class="subtitle">Talk to your AI naturally with speech-to-text and text-to-speech — choose from local or cloud engines.</p>
+
+      <div class="callout warning">
+        <strong>⚠ HTTPS Required for Microphone</strong>
+        Browsers only allow microphone access on secure origins. Speech-to-text will not work over plain <code>http://</code> — you must access Uplink via <strong>HTTPS</strong> or <strong>localhost</strong>. If you're accessing Uplink from another device on your network (e.g. your phone), use a tool like <a href="remote-access.html">Tailscale</a> which provides HTTPS automatically, or set up your own TLS certificate. TTS (text-to-speech) playback works over HTTP — only the microphone requires HTTPS.
+      </div>
+
+      <h2>How It Works</h2>
+      <p>Uplink's voice mode has two independent pipelines:</p>
+      <ul>
+        <li><strong>Speech-to-Text (STT)</strong> — Your voice is transcribed to text, then sent to the AI as a regular message</li>
+        <li><strong>Text-to-Speech (TTS)</strong> — The AI's text response is converted to audio and played back</li>
+      </ul>
+      <p>Both are configured independently in Settings → Voice. You can use one without the other — for example, dictate messages but read responses, or type messages but hear responses spoken aloud.</p>
+
+      <h2>TTS Engines</h2>
+      <p>Uplink supports three text-to-speech engines. You select which one to use in Settings → Voice, and provide the server URL if needed.</p>
+
+      <h3>Edge TTS (Free Cloud)</h3>
+      <p>Microsoft's Edge TTS API. Free, no API key required, excellent quality with many voice options. This is the easiest way to get started with voice.</p>
+      <ul>
+        <li>No setup required — works out of the box</li>
+        <li>Hundreds of voices across dozens of languages</li>
+        <li>Requires internet connection</li>
+        <li>Slight latency due to cloud round-trip</li>
+      </ul>
+
+      <h3>OpenAI TTS (Paid Cloud)</h3>
+      <p>OpenAI's text-to-speech API. High quality, natural-sounding voices. Requires an OpenAI API key.</p>
+      <ul>
+        <li>6 voices: alloy, echo, fable, onyx, nova, shimmer</li>
+        <li>Very natural prosody and intonation</li>
+        <li>Requires API key and has per-character pricing</li>
+        <li>Configure your API key in Settings → Voice</li>
+      </ul>
+
+      <h3>Coqui XTTS (Local GPU)</h3>
+      <p>The highest quality option — runs entirely on your machine. Requires an NVIDIA GPU with CUDA support and a running XTTS server.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Install and run Coqui XTTS server (separate from Uplink)
+pip install TTS
+python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2
+
+# Default runs on http://localhost:5002
+# Enter this URL in Uplink Settings → Voice → TTS Server URL</code></pre>
+      </div>
+
+      <div class="callout">
+        <strong>ℹ GPU Required</strong>
+        XTTS needs an NVIDIA GPU with at least 4 GB VRAM. On CPU it will run but with unacceptable latency for real-time conversation.
+      </div>
+
+      <h2>STT Engines</h2>
+
+      <h3>faster-whisper (Local)</h3>
+      <p>A highly optimized implementation of OpenAI's Whisper model. Runs locally on CPU or GPU with excellent accuracy.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Install and run faster-whisper server
+pip install faster-whisper
+# Use a wrapper server that exposes an HTTP API, e.g.:
+pip install whisper-asr-webservice
+python -m whisper_asr.webservice --model medium --device cuda
+
+# Enter the server URL in Uplink Settings → Voice → STT Server URL</code></pre>
+      </div>
+
+      <h3>Browser Native STT</h3>
+      <p>Uses the Web Speech API built into your browser. No setup required, but accuracy varies by browser and may require an internet connection (Chrome sends audio to Google's servers).</p>
+
+      <h2>Voice Configuration Summary</h2>
+      <p>All voice settings are in Settings → Voice. Here's what each field does:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Setting</th><th>Description</th><th>Default</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>TTS Engine</strong></td><td>Which TTS backend to use</td><td>Edge TTS</td></tr>
+            <tr><td><strong>TTS Server URL</strong></td><td>URL for XTTS server (if using local)</td><td><code>http://localhost:5002</code></td></tr>
+            <tr><td><strong>TTS Voice</strong></td><td>Voice name/ID for the selected engine</td><td>Depends on engine</td></tr>
+            <tr><td><strong>STT Engine</strong></td><td>Which STT backend to use</td><td>Browser native</td></tr>
+            <tr><td><strong>STT Server URL</strong></td><td>URL for faster-whisper server</td><td><code>http://localhost:9000</code></td></tr>
+            <tr><td><strong>Auto-play</strong></td><td>Automatically play TTS audio on response</td><td>On</td></tr>
+            <tr><td><strong>Voice Language</strong></td><td>Language for STT recognition</td><td>en</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warning">
+        <strong>⚠ User-Provided Servers</strong>
+        Uplink does not bundle or manage TTS/STT servers. You install and run them yourself, then point Uplink to the URLs. This is by design — it keeps Uplink lightweight and gives you full control over models and hardware.
+      </div>
+
+      <h2>Using Voice Mode</h2>
+      <p>Once configured, activate voice mode from the microphone button in the chat input area. Hold to talk (or tap to toggle, depending on your settings). Your speech is transcribed, sent as a message, and the response is spoken back to you.</p>
+      <p>Voice mode works on desktop browsers, mobile Safari, and mobile Chrome. For the best experience on mobile, install Uplink as a PWA.</p>
+
+      <div class="callout">
+        <strong>ℹ Microphone on remote devices</strong>
+        If you're accessing Uplink from a phone or tablet over your local network, the microphone button won't work unless you're on a secure origin (HTTPS or localhost). See <a href="remote-access.html">Remote Access</a> for how to set this up with Tailscale.
+      </div>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uplink — Your AI, Your Hardware, Your Rules</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body class="home">
+  <!-- Starfield -->
+  <canvas id="stars"></canvas>
+
+  <!-- Nav -->
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK</a>
+    <nav class="topnav">
+      <a href="getting-started.html">Docs</a>
+      <a href="features.html">Features</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="getting-started.html">Docs</a>
+    <a href="features.html">Features</a>
+    <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">Open Source & Free Forever</div>
+    <h1 class="hero-title">UPLINK</h1>
+    <p class="hero-tagline">Your AI, Your Hardware, Your Rules</p>
+    <p class="hero-desc">A local-first AI chat app that runs entirely on your machine. No cloud. No subscriptions. No data collection. Just you and your AI.</p>
+    <div class="hero-actions">
+      <a href="getting-started.html" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/mooncompany/uplink" class="btn btn-secondary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+    <div class="hero-terminal">
+      <div class="terminal-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+      <code>$ npx uplink-chat<br><span class="terminal-muted"># or</span><br>$ git clone https://github.com/mooncompany/uplink<br>$ cd uplink && npm install && node server.js<br><br><span class="terminal-accent">✓ Uplink running at http://localhost:3456</span></code>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section class="install" id="install">
+    <h2 class="section-title">Install in 60 Seconds</h2>
+    <p class="install-prereq">Requires <a href="https://nodejs.org/" target="_blank">Node.js 18+</a> and <a href="https://git-scm.com/" target="_blank">Git</a></p>
+    <div class="install-steps">
+      <div class="install-step">
+        <span class="step-number">1</span>
+        <div class="step-content">
+          <h3>Clone the repo</h3>
+          <div class="code-inline"><code>git clone https://github.com/mooncompany/uplink.git</code></div>
+        </div>
+      </div>
+      <div class="install-step">
+        <span class="step-number">2</span>
+        <div class="step-content">
+          <h3>Install dependencies</h3>
+          <div class="code-inline"><code>cd uplink && npm install</code></div>
+        </div>
+      </div>
+      <div class="install-step">
+        <span class="step-number">3</span>
+        <div class="step-content">
+          <h3>Start the server</h3>
+          <div class="code-inline"><code>npm start</code></div>
+        </div>
+      </div>
+      <div class="install-step">
+        <span class="step-number">4</span>
+        <div class="step-content">
+          <h3>Open in your browser</h3>
+          <div class="code-inline"><code>http://localhost:3456</code></div>
+          <p class="step-note">The setup wizard walks you through connecting your API key and naming your assistant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" fill="none" stroke="#00f0ff" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Local-First</h3>
+        <p>Your data never leaves your machine. No cloud, no tracking, no third-party servers. Everything runs on your hardware.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" fill="none" stroke="#00f0ff" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <h3>Voice Chat</h3>
+        <p>Talk naturally with GPU-accelerated text-to-speech and speech-to-text. Supports local models like XTTS and Whisper.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" fill="none" stroke="#00f0ff" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+        </div>
+        <h3>Encrypted</h3>
+        <p>AES-256 end-to-end encryption for all messages. Your conversations are protected at rest with a password only you know.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" fill="none" stroke="#00f0ff" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><path d="M9.5 8l-2 2.5M16.5 8l2 2.5M8.5 13.5l3 2.5M15.5 13.5l-3 2.5"/></svg>
+        </div>
+        <h3>Themes</h3>
+        <p>6 built-in themes from deep space to daylight. Or create your own with CSS custom properties. Your app, your look.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" fill="none" stroke="#00f0ff" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4"/></svg>
+        </div>
+        <h3>Multi-Device</h3>
+        <p>Access from your phone, tablet, or any device on your network. Sync conversations across devices with Tailscale or LAN.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" fill="none" stroke="#00f0ff" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <h3>Open Source</h3>
+        <p>MIT licensed. Fully hackable. Read every line of code, modify anything, contribute back. No vendor lock-in, ever.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">⬡ UPLINK</div>
+      <div class="footer-links">
+        <a href="getting-started.html">Docs</a>
+        <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+        <a href="https://discord.gg/mooncompany" target="_blank">Discord</a>
+      </div>
+      <div class="footer-copy">Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</div>
+    </div>
+  </footer>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>
