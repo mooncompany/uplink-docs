@@ -216,6 +216,17 @@ a:hover { opacity: 0.8; }
   border-radius: 12px;
   overflow: hidden;
   text-align: left;
+  animation: terminalRainbow 6s linear infinite;
+}
+
+@keyframes terminalRainbow {
+  0%   { border-color: #ff4466; box-shadow: 0 0 12px rgba(255,68,102,0.3), 0 0 40px rgba(255,68,102,0.08); }
+  16%  { border-color: #ff9f43; box-shadow: 0 0 12px rgba(255,159,67,0.3), 0 0 40px rgba(255,159,67,0.08); }
+  33%  { border-color: #ffd32a; box-shadow: 0 0 12px rgba(255,211,42,0.3), 0 0 40px rgba(255,211,42,0.08); }
+  50%  { border-color: #4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.3), 0 0 40px rgba(74,222,128,0.08); }
+  66%  { border-color: #00b4d8; box-shadow: 0 0 12px rgba(0,180,216,0.3), 0 0 40px rgba(0,180,216,0.08); }
+  83%  { border-color: #c084fc; box-shadow: 0 0 12px rgba(192,132,252,0.3), 0 0 40px rgba(192,132,252,0.08); }
+  100% { border-color: #ff4466; box-shadow: 0 0 12px rgba(255,68,102,0.3), 0 0 40px rgba(255,68,102,0.08); }
 }
 
 .terminal-bar {
