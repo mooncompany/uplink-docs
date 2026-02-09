@@ -220,20 +220,20 @@ a:hover { opacity: 0.8; }
 
 .terminal-bar {
   display: flex;
-  gap: 6px;
-  padding: 10px 14px;
+  align-items: center;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid var(--border);
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.terminal-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  opacity: 0.6;
 }
-.dot.red { background: #ff5f57; }
-.dot.yellow { background: #febc2e; }
-.dot.green { background: #28c840; }
 
 .hero-terminal code {
   display: block;
