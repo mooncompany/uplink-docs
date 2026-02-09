@@ -70,6 +70,36 @@
         <li><strong>Multi-device sync</strong> — Open the same Uplink instance from any device on your network</li>
       </ul>
 
+      <h2>Satellites</h2>
+      <p>Satellites are separate OpenClaw chat sessions — think of them like chat tabs. Each satellite is an independent conversation with its own history and context, letting you keep different topics or projects cleanly separated.</p>
+      <ul>
+        <li><strong>Independent conversations</strong> — Each satellite has its own message history and context window</li>
+        <li><strong>Create and switch freely</strong> — Spin up new satellites and jump between them from the satellite switcher in the header</li>
+        <li><strong>Fresh context per tab</strong> — Starting a new satellite gives you a clean slate without losing your other conversations</li>
+        <li><strong>Organize by topic</strong> — Keep work, personal projects, and experiments in separate satellites</li>
+        <li><strong>Same gateway</strong> — All satellites route through your single OpenClaw gateway — they're separate conversations, not separate AI providers</li>
+      </ul>
+
+      <div class="callout">
+        <strong>ℹ Satellites ≠ Providers</strong>
+        Satellites are conversation-level separation, not model-level. They all use the same OpenClaw gateway and whatever model it's configured with. Think "tabs" not "backends."
+      </div>
+
+      <h2>Activity Panel</h2>
+      <p>The activity panel gives you a real-time window into what OpenClaw is doing under the hood. Toggle it with the wrench icon (<strong>🔧</strong>) in the header to see live developer and debug information as your conversation flows.</p>
+      <ul>
+        <li><strong>Tool calls</strong> — See which tools OpenClaw invokes and their results</li>
+        <li><strong>API requests</strong> — Watch gateway requests and responses in real-time</li>
+        <li><strong>Processing activity</strong> — Follow the AI's work as it streams, reasons, and executes</li>
+        <li><strong>Errors and warnings</strong> — Surface issues immediately instead of wondering why something failed</li>
+        <li><strong>Toggle on/off</strong> — Click the wrench icon in the header to show or hide the panel at any time</li>
+      </ul>
+
+      <div class="callout">
+        <strong>💡 When to use it</strong>
+        The activity panel is especially useful when debugging tool failures, monitoring long-running tasks, or just satisfying your curiosity about how OpenClaw processes your requests.
+      </div>
+
       <h2>Voice Chat</h2>
       <p>Talk to your AI instead of typing. Uplink supports multiple TTS and STT engines — from free cloud services to fully local GPU-accelerated models. See the <a href="voice-chat.html">Voice Chat</a> page for full details.</p>
 
