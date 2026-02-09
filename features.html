@@ -44,10 +44,20 @@
 
     <main class="docs-content">
       <h1>Features Overview</h1>
-      <p class="subtitle">Everything Uplink can do — and why it does it on your terms.</p>
+      <p class="subtitle">Everything Uplink can do — powered by OpenClaw, controlled by you.</p>
+
+      <h2>Built on OpenClaw</h2>
+      <p>Uplink is designed as a frontend for <a href="https://openclaw.ai" target="_blank">OpenClaw</a> — the open-source AI agent platform. Every feature in Uplink leverages OpenClaw's capabilities under the hood:</p>
+      <ul>
+        <li><strong>Chat & streaming</strong> — Powered by OpenClaw's gateway API (OpenAI-compatible)</li>
+        <li><strong>Satellites</strong> — Uplink's multi-provider switching maps directly to OpenClaw's model routing</li>
+        <li><strong>Session persistence</strong> — Your conversation history lives in OpenClaw's session store, surviving restarts and device switches</li>
+        <li><strong>Context tracking</strong> — The token counter in the header reads real-time context usage from OpenClaw's session data</li>
+        <li><strong>Gateway proxy</strong> — Uplink proxies WebSocket connections directly to OpenClaw for real-time streaming</li>
+      </ul>
 
       <h2>Local-First Architecture</h2>
-      <p>Uplink runs as a Node.js server on <code>localhost:3456</code>. Your conversations, settings, and data live on your machine. The AI connection goes through the OpenClaw gateway — an OpenAI-compatible API running locally — so your prompts and responses never touch third-party servers unless you explicitly configure an external endpoint.</p>
+      <p>Uplink runs as a Node.js server on <code>localhost:3456</code>. Your conversations, settings, and data live on your machine. The AI connection goes through the OpenClaw gateway running locally, so your prompts and responses never touch third-party servers unless you explicitly configure an external endpoint.</p>
       <p>When your internet goes down, Uplink keeps serving. The web UI, settings, and conversation history are all local. Only the AI inference requires a working gateway connection.</p>
 
       <h2>Text Chat</h2>
@@ -117,12 +127,17 @@
       <p>Since Uplink is a web server, any device on your network can access it by navigating to the server's IP and port. Conversations sync in real-time via WebSocket. Use it on your desktop, laptop, phone, and tablet simultaneously.</p>
       <p>For access outside your home network, see <a href="remote-access.html">Remote Access</a>.</p>
 
-      <h2>OpenAI-Compatible API</h2>
-      <p>Uplink connects to AI through the <strong>OpenClaw gateway</strong>, which provides an OpenAI-compatible API. This is the tested and supported configuration.</p>
+      <h2>OpenClaw Gateway</h2>
+      <p>Uplink connects to AI exclusively through the <strong>OpenClaw gateway</strong>. OpenClaw provides an OpenAI-compatible API that handles model routing, session management, and streaming — Uplink is built to take full advantage of these features.</p>
       
       <div class="callout">
-        <strong>💡 Other providers (untested)</strong>
-        In theory, you could point Uplink at any OpenAI-compatible endpoint — llama.cpp server, LM Studio, text-generation-webui, or the official OpenAI API. The API format is standard. However, this hasn't been tested and some features (like streaming, voice chat, or session management) may not work as expected without OpenClaw. If you try it, let us know how it goes!
+        <strong>💡 Why OpenClaw?</strong>
+        OpenClaw isn't just an API proxy — it's an AI agent platform with session memory, multi-model routing (satellites), tool execution, and more. Uplink is built to surface all of this through a clean chat interface. Features like the satellite switcher, context tracker, and persistent conversations all depend on OpenClaw's session architecture.
+      </div>
+
+      <div class="callout warning">
+        <strong>⚠ Other endpoints</strong>
+        While the API format is OpenAI-compatible, pointing Uplink at a raw OpenAI endpoint, llama.cpp, or LM Studio will give you basic chat only. Features like satellites, session persistence, context tracking, and gateway status won't work without OpenClaw.
       </div>
 
       <div class="docs-footer">

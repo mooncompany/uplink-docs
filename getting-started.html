@@ -47,7 +47,18 @@
       <p class="subtitle">Install Uplink and have your local AI chat running in under 5 minutes.</p>
 
       <h2>What is Uplink?</h2>
-      <p>Uplink is a local-first AI chat application that runs as a Node.js web server on your machine. It connects to AI models through the OpenClaw gateway (an OpenAI-compatible API) and provides a polished chat interface accessible from any browser. Text chat, voice chat, themes, encryption — all in one self-hosted package.</p>
+      <p>Uplink is a chat interface built specifically for <a href="https://openclaw.ai" target="_blank">OpenClaw</a>. It runs as a Node.js web server on your machine and connects to the OpenClaw gateway — giving you a polished, feature-rich frontend for your AI assistant.</p>
+      <p>Think of it this way: <strong>OpenClaw is the brain, Uplink is the face.</strong> OpenClaw handles the AI sessions, model routing, memory, and tool execution. Uplink gives you a beautiful interface to interact with all of that — text chat, voice chat, themes, encryption, multi-device access — all self-hosted on your hardware.</p>
+
+      <div class="callout">
+        <strong>🔗 OpenClaw Features Uplink Uses</strong>
+        <ul style="margin-top: 8px; margin-bottom: 0;">
+          <li><strong>Gateway API</strong> — OpenClaw's OpenAI-compatible API powers all chat and streaming</li>
+          <li><strong>Session management</strong> — Conversations persist through OpenClaw's session store</li>
+          <li><strong>Multi-model routing</strong> — Switch between AI providers (OpenAI, Anthropic, local models) via OpenClaw's satellite system</li>
+          <li><strong>WebSocket streaming</strong> — Real-time token streaming through OpenClaw's gateway proxy</li>
+        </ul>
+      </div>
 
       <h2>System Requirements</h2>
       <div class="table-wrap">
