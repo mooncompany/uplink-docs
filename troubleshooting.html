@@ -218,31 +218,6 @@ GATEWAY_URL=http://100.85.40.53:23248</code></pre>
         Uplink's encryption is intentionally unrecoverable without the password. Store your password in a password manager.
       </div>
 
-      <h2>File Upload Issues</h2>
-
-      <h3>File Picker Freezes Chrome</h3>
-      <p>If clicking the attachment button freezes Chrome completely, this is <strong>not an Uplink bug</strong> — it's a Chrome + Windows conflict. The file dialog system is shared across all sites.</p>
-
-      <p><strong>How to confirm:</strong></p>
-      <ul>
-        <li>Try the same action in Edge — if Edge works, it's Chrome-specific</li>
-        <li>Try uploading a file on any other site (e.g., ChatGPT, Gmail) — if it freezes there too, it's system-wide</li>
-        <li>In Chrome Task Manager (Shift+Esc), look for "Utility: Windows Utilities" pegging high CPU</li>
-      </ul>
-
-      <p><strong>Common causes:</strong></p>
-      <ul>
-        <li><strong>Windows updates</strong> — A recent Windows security update may conflict with Chrome's file dialog. Try uninstalling the latest update: <code>wusa /uninstall /kb:KBNUMBER</code></li>
-        <li><strong>Shell extensions</strong> — Cloud storage apps (OneDrive, Dropbox, Google Drive) inject into the file picker dialog. Use <a href="https://www.nirsoft.net/utils/shexview.html" target="_blank">ShellExView</a> to identify and disable suspect extensions.</li>
-      </ul>
-
-      <p><strong>Quick fixes:</strong></p>
-      <ol>
-        <li>Restart Windows Explorer (Task Manager → Windows Explorer → Restart)</li>
-        <li>Reset Chrome: <code>chrome://settings/reset</code> → "Restore settings to their original defaults"</li>
-        <li>Use Edge as a workaround for file uploads until the conflict is resolved</li>
-      </ol>
-
       <h2>Browser Compatibility</h2>
       <p>Uplink works in all modern browsers. Known quirks:</p>
 
