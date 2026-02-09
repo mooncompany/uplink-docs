@@ -114,6 +114,61 @@ tailscale ip -4
 # http://100.64.0.1:3456</code></pre>
       </div>
 
+      <h3>Network Binding</h3>
+      <p>By default, Uplink binds to <code>127.0.0.1</code> (localhost only) when authentication is disabled. This is a security measure — but it also means Tailscale and LAN devices can't connect. You need to tell Uplink to listen on all interfaces:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Option 1: Environment variable
+UPLINK_HOST=0.0.0.0 uplink-chat start
+
+# Option 2: PowerShell (Windows)
+$env:UPLINK_HOST="0.0.0.0"; uplink-chat start
+
+# Option 3: Add to your .env file
+UPLINK_HOST=0.0.0.0</code></pre>
+      </div>
+
+      <div class="callout">
+        <strong>💡 Tip</strong>
+        Enabling authentication (<code>UPLINK_AUTH_ENABLED=true</code>) automatically binds to <code>0.0.0.0</code>, so you won't need to set <code>UPLINK_HOST</code> separately.
+      </div>
+
+      <h3>Tailscale HTTPS</h3>
+      <p>When Uplink detects a Tailscale connection, it automatically provisions a TLS certificate and starts an HTTPS server on port 3457. This enables microphone and camera access on mobile (browsers require HTTPS for media APIs).</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>url</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Tailscale HTTPS (enables mic/camera on mobile)
+https://your-hostname.tailnet-name.ts.net:3457
+
+# Plain HTTP (no mic/camera on mobile)
+http://100.x.x.x:3456</code></pre>
+      </div>
+
+      <h3>Gateway URL Must Stay Localhost</h3>
+      <p>A common mistake: setting <code>GATEWAY_URL</code> to your Tailscale IP instead of localhost. The OpenClaw gateway only listens on <code>127.0.0.1</code> — Uplink proxies requests to it locally, regardless of how remote clients connect to Uplink.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>.env</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># ✅ Correct — gateway is always local
+GATEWAY_URL=http://127.0.0.1:23248
+
+# ❌ Wrong — gateway doesn't listen on Tailscale IP
+GATEWAY_URL=http://100.85.40.53:23248</code></pre>
+      </div>
+
+      <p>If <code>GATEWAY_URL</code> points to a non-localhost address, you'll see the Uplink UI load normally but messages will fail with "No response received."</p>
+
       <div class="table-wrap">
         <table>
           <thead>

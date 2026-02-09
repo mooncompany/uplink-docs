@@ -170,11 +170,30 @@ curl http://localhost:5002/api/tts -X POST \
       <h3>Can't Connect from Another Device</h3>
       <p>If other devices on your network can't reach Uplink:</p>
       <ol>
-        <li>Verify both devices are on the same Wi-Fi / LAN</li>
+        <li>Verify both devices are on the same Wi-Fi / LAN (or both on Tailscale)</li>
+        <li><strong>Check that Uplink is bound to <code>0.0.0.0</code></strong> — by default it only listens on localhost when auth is disabled. Set <code>UPLINK_HOST=0.0.0.0</code> in your environment or <code>.env</code> file. See <a href="remote-access.html#network-binding">Network Binding</a>.</li>
         <li>Check your firewall (see <a href="remote-access.html">Remote Access</a>)</li>
         <li>Try using the IP address directly — not hostname</li>
-        <li>Make sure you're using port 3456 (or whatever port Uplink is running on)</li>
+        <li>Make sure you're using port 3456 (or 3457 for Tailscale HTTPS)</li>
       </ol>
+
+      <h3>Page Loads But "No Response Received"</h3>
+      <p>If you can see the Uplink UI and send messages, but responses never come back:</p>
+      <p>This usually means <code>GATEWAY_URL</code> in your <code>.env</code> file is set to a non-localhost address (like your Tailscale IP). The OpenClaw gateway only listens on <code>127.0.0.1</code>, so Uplink can't proxy your messages to it.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>.env</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># ✅ Correct
+GATEWAY_URL=http://127.0.0.1:23248
+
+# ❌ Wrong — causes "No response received"
+GATEWAY_URL=http://100.85.40.53:23248</code></pre>
+      </div>
+
+      <p>The gateway URL should <strong>always</strong> be localhost, even when accessing Uplink remotely. Uplink handles the proxying — remote clients talk to Uplink, and Uplink talks to the gateway locally.</p>
 
       <h3>WebSocket Disconnections</h3>
       <p>If conversations stop syncing or the UI shows "disconnected":</p>
@@ -198,6 +217,31 @@ curl http://localhost:5002/api/tts -X POST \
         <strong>⚠ No Recovery</strong>
         Uplink's encryption is intentionally unrecoverable without the password. Store your password in a password manager.
       </div>
+
+      <h2>File Upload Issues</h2>
+
+      <h3>File Picker Freezes Chrome</h3>
+      <p>If clicking the attachment button freezes Chrome completely, this is <strong>not an Uplink bug</strong> — it's a Chrome + Windows conflict. The file dialog system is shared across all sites.</p>
+
+      <p><strong>How to confirm:</strong></p>
+      <ul>
+        <li>Try the same action in Edge — if Edge works, it's Chrome-specific</li>
+        <li>Try uploading a file on any other site (e.g., ChatGPT, Gmail) — if it freezes there too, it's system-wide</li>
+        <li>In Chrome Task Manager (Shift+Esc), look for "Utility: Windows Utilities" pegging high CPU</li>
+      </ul>
+
+      <p><strong>Common causes:</strong></p>
+      <ul>
+        <li><strong>Windows updates</strong> — A recent Windows security update may conflict with Chrome's file dialog. Try uninstalling the latest update: <code>wusa /uninstall /kb:KBNUMBER</code></li>
+        <li><strong>Shell extensions</strong> — Cloud storage apps (OneDrive, Dropbox, Google Drive) inject into the file picker dialog. Use <a href="https://www.nirsoft.net/utils/shexview.html" target="_blank">ShellExView</a> to identify and disable suspect extensions.</li>
+      </ul>
+
+      <p><strong>Quick fixes:</strong></p>
+      <ol>
+        <li>Restart Windows Explorer (Task Manager → Windows Explorer → Restart)</li>
+        <li>Reset Chrome: <code>chrome://settings/reset</code> → "Restore settings to their original defaults"</li>
+        <li>Use Edge as a workaround for file uploads until the conflict is resolved</li>
+      </ol>
 
       <h2>Browser Compatibility</h2>
       <p>Uplink works in all modern browsers. Known quirks:</p>
