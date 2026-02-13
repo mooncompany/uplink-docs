@@ -148,6 +148,7 @@ curl http://localhost:8020/api/tts -X POST \
         <li>If using faster-whisper: Verify the server is running and URL is correct in Settings → Voice &amp; TTS</li>
         <li>If using OpenAI Whisper STT: Verify your OpenAI API key is valid and has remaining credits</li>
         <li>If using Groq STT: Verify your Groq API key is valid and the Groq service is reachable</li>
+        <li>If using Browser STT: Make sure you're using Chrome or Edge — Firefox and Safari have limited Web Speech API support</li>
         <li>On mobile: Make sure the PWA has microphone permissions in your device settings</li>
         <li>On mobile over Tailscale: Use the HTTPS URL (<code>https://...ts.net:3457</code>) — browsers require HTTPS for microphone access</li>
       </ul>
