@@ -107,6 +107,13 @@ npm start</code></pre>
 
       <p>All dependencies are pulled in by npm. No native compilation required for the core app.</p>
 
+      <div class="callout">
+        <strong>📦 Optional: Image Compression</strong>
+        <p style="margin-top: 8px; margin-bottom: 0;">Uplink can use <a href="https://sharp.pixelplumbing.com" target="_blank">Sharp</a> to automatically compress uploaded images before sending them to the AI. Sharp is optional — if it's not installed, images are sent at their original size. To enable compression:</p>
+        <pre style="margin-top: 8px; margin-bottom: 0;"><code>npm install sharp</code></pre>
+        <p style="margin-top: 8px; margin-bottom: 0;">If Sharp fails to install (common on some systems without build tools), don't worry — everything else works fine without it.</p>
+      </div>
+
       <p>You'll see output like:</p>
 
       <div class="code-block">
