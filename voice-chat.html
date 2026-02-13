@@ -60,7 +60,7 @@
       <p>Both are configured independently in Settings → Voice & TTS. You can use one without the other — for example, dictate messages but read responses, or type messages but hear responses spoken aloud.</p>
 
       <h2>TTS Engines</h2>
-      <p>Uplink supports five text-to-speech engines. You select which one to use in Settings → Voice & TTS, and provide the server URL or API key if needed.</p>
+      <p>Uplink supports five text-to-speech engines: Edge TTS, OpenAI TTS, XTTS, ElevenLabs, and Piper. You select which one to use in Settings → Voice & TTS, and provide the server URL or API key if needed.</p>
 
       <h3>ElevenLabs (Cloud)</h3>
       <p>ElevenLabs is the primary TTS provider in Uplink. Cloud-based with the highest quality voice synthesis available — natural, expressive, and highly realistic.</p>
@@ -82,10 +82,7 @@
       </ul>
 
       <h3>Edge TTS (Free Cloud)</h3>
-      <p>Microsoft's Edge TTS API. Free, no API key required, excellent quality with many voice options.</p>
-      <ul>
-        <li>Requires installing the <code>node-edge-tts</code> package:</li>
-      </ul>
+      <p>Microsoft's Edge TTS API. Free, no API key required, excellent quality with many voice options. Requires installing the <code>node-edge-tts</code> package.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -148,6 +145,7 @@ python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2
       </div>
 
       <h2>STT Engines</h2>
+      <p>Uplink supports four speech-to-text providers: faster-whisper (local, free), Groq Whisper (cloud, free tier), OpenAI Whisper (cloud, paid), and Browser STT (free, built-in).</p>
 
       <h3>OpenAI Whisper (Cloud)</h3>
       <p>OpenAI's cloud-based speech-to-text API. Highly accurate transcription across many languages using the <code>whisper-1</code> model.</p>
@@ -159,7 +157,7 @@ python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2
         <li>Pay-per-minute pricing</li>
       </ul>
 
-      <h3>Groq STT (Cloud)</h3>
+      <h3>Groq Whisper (Cloud)</h3>
       <p>Groq's cloud-based speech-to-text service. Extremely fast transcription powered by Groq's LPU hardware, with a generous free tier.</p>
       <ul>
         <li>Requires a <a href="https://console.groq.com" target="_blank">Groq</a> API key</li>
@@ -186,6 +184,15 @@ python -m whisper_asr.webservice --model medium --device cuda
 # Enter the server URL in Uplink Settings → Voice & TTS → STT Server URL</code></pre>
       </div>
 
+      <h3>Browser STT (Built-in)</h3>
+      <p>Built-in browser speech recognition using the Web Speech API. Free and requires no setup, but accuracy and language support varies by browser.</p>
+      <ul>
+        <li>No configuration needed — works out of the box</li>
+        <li>Free and built into modern browsers</li>
+        <li>Accuracy depends on browser and device</li>
+        <li>Requires internet connection (most browsers use cloud backend)</li>
+      </ul>
+
       <h2>Voice Configuration Summary</h2>
       <p>All voice settings are in Settings → Voice & TTS. Here's what each field does:</p>
 
@@ -195,11 +202,11 @@ python -m whisper_asr.webservice --model medium --device cuda
             <tr><th>Setting</th><th>Description</th><th>Default</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>TTS Engine</strong></td><td>Which TTS backend to use</td><td>None (disabled)</td></tr>
-            <tr><td><strong>TTS Server URL</strong></td><td>URL for XTTS server (if using local)</td><td><em>Empty</em></td></tr>
+            <tr><td><strong>TTS Engine</strong></td><td>Which TTS backend to use</td><td>none (disabled)</td></tr>
+            <tr><td><strong>TTS Server URL</strong></td><td>URL for XTTS server (if using local)</td><td><em>localhost:8020</em></td></tr>
             <tr><td><strong>TTS Voice</strong></td><td>Voice name/ID for the selected engine</td><td>Depends on engine</td></tr>
-            <tr><td><strong>STT Engine</strong></td><td>Which STT backend to use</td><td>None (disabled)</td></tr>
-            <tr><td><strong>STT Server URL</strong></td><td>URL for faster-whisper server</td><td><em>Empty</em></td></tr>
+            <tr><td><strong>STT Engine</strong></td><td>Which STT backend to use</td><td>none (disabled)</td></tr>
+            <tr><td><strong>STT Server URL</strong></td><td>URL for faster-whisper server</td><td><em>localhost:8000</em></td></tr>
           </tbody>
         </table>
       </div>

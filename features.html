@@ -71,13 +71,14 @@
       </ul>
 
       <h2>Satellites</h2>
-      <p>Satellites are OpenClaw's embed and widget system — they allow you to embed Uplink chat interfaces into other pages or run multiple independent sessions. Each satellite maps to an OpenClaw satellite instance with its own context and configuration.</p>
+      <p>Satellites are independent AI conversations with isolated context. Each satellite maintains its own message history, system prompt, and context window — completely separate from your other conversations. Think of them as parallel chat sessions that don't interfere with each other.</p>
       <ul>
-        <li><strong>Embeddable widgets</strong> — Embed Uplink chat into external pages or applications via the satellite system</li>
-        <li><strong>Independent sessions</strong> — Each satellite has its own message history and context window</li>
+        <li><strong>Independent AI conversations</strong> — Each satellite is a separate conversation with its own isolated context and memory</li>
+        <li><strong>Isolated context windows</strong> — Messages in one satellite don't affect the context or token count of another</li>
         <li><strong>Create and switch freely</strong> — Spin up new satellites and jump between them from the satellite switcher in the header</li>
-        <li><strong>Isolated context</strong> — Starting a new satellite gives you a clean slate without losing your other conversations</li>
+        <li><strong>Clean slate on demand</strong> — Starting a new satellite gives you a fresh conversation without losing your other chats</li>
         <li><strong>Same gateway</strong> — All satellites route through your single OpenClaw gateway — they're separate sessions, not separate AI providers</li>
+        <li><strong>Embeddable</strong> — Part of OpenClaw's embed and widget system, allowing chat interfaces to be embedded in other pages or applications</li>
       </ul>
 
       <div class="callout">
@@ -173,12 +174,20 @@
         While the API format is OpenAI-compatible, pointing Uplink at a raw OpenAI endpoint, llama.cpp, or LM Studio will give you basic chat only. Features like satellites, session persistence, context tracking, and gateway status won't work without OpenClaw.
       </div>
 
-      <h2>Agents Panel</h2>
+      <h2>Agents</h2>
       <p>The Agents Panel lets you manage AI agent sessions, routing, and configuration directly from the Uplink interface. Access it to control how OpenClaw routes requests and configure agent-specific behavior.</p>
       <ul>
         <li><strong>Session management</strong> — View and manage active agent sessions</li>
         <li><strong>Routing configuration</strong> — Control how requests are routed between different agents</li>
         <li><strong>Agent settings</strong> — Configure agent-specific parameters and behavior</li>
+      </ul>
+
+      <h2>Watchdog Auto-Restart</h2>
+      <p>Uplink includes a watchdog process monitor that automatically restarts the server if it crashes or becomes unresponsive. Ensures high availability for long-running deployments.</p>
+      <ul>
+        <li><strong>Automatic recovery</strong> — Watchdog restarts Uplink if it crashes or hangs</li>
+        <li><strong>Health monitoring</strong> — Periodic checks ensure the server is responsive</li>
+        <li><strong>Minimal downtime</strong> — Rapid recovery keeps your AI assistant available</li>
       </ul>
 
       <h2>File Uploads</h2>
