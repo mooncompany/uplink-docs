@@ -70,14 +70,29 @@
             <tr><td>Node.js</td><td>v18+</td><td>v20 LTS or later</td></tr>
             <tr><td>OS</td><td>Windows 10 / macOS 12 / Ubuntu 20.04</td><td>Latest stable release</td></tr>
             <tr><td>RAM</td><td>4 GB</td><td>8 GB+</td></tr>
-            <tr><td>GPU</td><td>Not required</td><td>NVIDIA GPU (for local TTS with Coqui XTTS)</td></tr>
+            <tr><td>GPU</td><td>Not required</td><td>NVIDIA GPU (for local TTS with Coqui XTTS). Piper TTS runs on CPU.</td></tr>
             <tr><td>Network</td><td>LAN access</td><td>Tailscale for remote access</td></tr>
           </tbody>
         </table>
       </div>
 
       <h2>Installation</h2>
-      <p>Uplink is installed by cloning the repository and running <code>npm install</code>. No build tools, no Docker, no complex setup.</p>
+      
+      <h3>Quick Start with npx (Recommended)</h3>
+      <p>The fastest way to run Uplink is with <code>npx</code> — no clone or install step needed:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>npx uplink-chat</code></pre>
+      </div>
+
+      <p>That's it — Uplink downloads and starts automatically. No build tools, no Docker, no complex setup. Open <code>http://localhost:3456</code> in your browser and you're ready to go.</p>
+
+      <h3>Alternative: Install from Source</h3>
+      <p>If you prefer to clone the repository and run from source:</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -86,21 +101,11 @@
         </div>
         <pre><code>git clone https://github.com/mooncompany/uplink.git
 cd uplink
-npm install</code></pre>
+npm install
+npm start</code></pre>
       </div>
 
-      <p>That's it. All dependencies are pulled in by npm. No native compilation required for the core app.</p>
-
-      <h2>Starting the Server</h2>
-      <p>Launch Uplink with a single command. It starts a web server on <code>localhost:3456</code> by default.</p>
-
-      <div class="code-block">
-        <div class="code-block-header">
-          <span>bash</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code>node server.js</code></pre>
-      </div>
+      <p>All dependencies are pulled in by npm. No native compilation required for the core app.</p>
 
       <p>You'll see output like:</p>
 
@@ -117,12 +122,16 @@ npm install</code></pre>
       <p>Open <code>http://localhost:3456</code> in your browser and you're in.</p>
 
       <h2>First Run Setup</h2>
-      <p>On first launch, Uplink will prompt you to configure a few things:</p>
+      <p>On first launch, Uplink will prompt you to configure a few things in this order:</p>
       <ol>
-        <li><strong>Encryption password</strong> — Optional. If set, all conversations are encrypted with AES-256. You can skip this and enable it later in Settings → Security.</li>
-        <li><strong>AI connection</strong> — Enter your OpenClaw gateway URL. If OpenClaw is running on the same machine, Uplink will detect it automatically.</li>
-        <li><strong>Theme</strong> — Pick from 6 built-in themes. Default is Midnight (slate on dark). You can change this anytime in Settings → Display.</li>
+        <li><strong>Your Name</strong> — Enter your display name for the chat.</li>
+        <li><strong>Assistant Name</strong> — Choose a name for your AI assistant.</li>
+        <li><strong>Gateway URL</strong> — Enter your OpenClaw gateway URL. If OpenClaw is running on the same machine, Uplink will detect it automatically. You can change this later in Settings → Connection.</li>
+        <li><strong>Gateway Token</strong> — Enter the gateway token found in your OpenClaw <code>config.yaml</code>.</li>
+        <li><strong>Voice toggle</strong> — Enable or disable voice responses.</li>
+        <li><strong>Encryption toggle</strong> — Optional. If enabled, all conversations are encrypted with AES-256. You can skip this and enable it later in Settings → Privacy.</li>
       </ol>
+      <p>Theme selection is available after setup — go to Settings to choose from 5 built-in themes (Midnight, Daylight, Ember, Forest, Phantom). Default is Midnight (dark with cyan accents).</p>
 
       <div class="callout">
         <strong>💡 Tip</strong>
@@ -134,7 +143,7 @@ npm install</code></pre>
 
       <div class="callout warning">
         <strong>⚠ Common Issue</strong>
-        If the page loads but messages fail, make sure the OpenClaw gateway is running and the API endpoint is reachable from your machine. Check Settings → General for the gateway URL.
+        If the page loads but messages fail, make sure the OpenClaw gateway is running and the API endpoint is reachable from your machine. Check Settings → Connection for the gateway URL.
       </div>
 
       <h2>Next Steps</h2>
@@ -142,7 +151,7 @@ npm install</code></pre>
         <li><a href="configuration.html">Configuration</a> — Customize the Settings panel and environment</li>
         <li><a href="voice-chat.html">Voice Chat</a> — Enable speech-to-text and text-to-speech</li>
         <li><a href="remote-access.html">Remote Access</a> — Access Uplink from other devices</li>
-        <li><a href="themes.html">Themes</a> — Browse the 6 built-in themes</li>
+        <li><a href="themes.html">Themes</a> — Browse the 5 built-in themes (Midnight, Daylight, Ember, Forest, Phantom)</li>
       </ul>
 
       <div class="docs-footer">

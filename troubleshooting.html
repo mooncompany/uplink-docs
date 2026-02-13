@@ -99,8 +99,8 @@ npm install</code></pre>
       <p>If the UI loads but messages fail with a connection error, Uplink can't reach the OpenClaw gateway.</p>
       <ul>
         <li>Check that OpenClaw is running: <code>openclaw gateway status</code></li>
-        <li>Verify the Gateway URL in Settings → General matches your OpenClaw setup</li>
-        <li>Default gateway URL is usually <code>http://localhost:5001/v1</code></li>
+        <li>Verify the Gateway URL in Settings → Connection matches your OpenClaw setup</li>
+        <li>Default gateway URL is <code>http://127.0.0.1:18789</code></li>
         <li>Try opening the gateway URL in your browser — you should see a JSON response</li>
       </ul>
 
@@ -119,9 +119,11 @@ npm install</code></pre>
       <p>If you don't hear voice responses:</p>
       <ol>
         <li>Check Settings → Voice to confirm a TTS engine is selected</li>
-        <li>If using Edge TTS: Make sure you have internet access</li>
-        <li>If using XTTS: Verify the XTTS server is running and the URL is correct</li>
+        <li>If using Edge TTS: Make sure you have internet access and <code>node-edge-tts</code> is installed</li>
+        <li>If using XTTS: Verify the XTTS server is running and the URL is correct (default: <code>http://localhost:8020</code>)</li>
         <li>If using OpenAI TTS: Verify your API key is valid</li>
+        <li>If using ElevenLabs: Verify your API key is valid and you have remaining quota</li>
+        <li>If using Piper: Verify <code>PIPER_MODEL</code> points to a valid <code>.onnx</code> model file</li>
         <li>Check browser audio permissions — Uplink needs permission to play audio</li>
       </ol>
 
@@ -131,7 +133,7 @@ npm install</code></pre>
           <button class="copy-btn">Copy</button>
         </div>
         <pre><code># Test your XTTS server directly
-curl http://localhost:5002/api/tts -X POST \
+curl http://localhost:8020/api/tts -X POST \
   -H "Content-Type: application/json" \
   -d '{"text": "Hello", "language": "en"}' \
   --output test.wav
@@ -143,9 +145,12 @@ curl http://localhost:5002/api/tts -X POST \
       <p>If voice input doesn't transcribe:</p>
       <ul>
         <li>Check browser microphone permissions — the browser must allow access</li>
-        <li>If using faster-whisper: Verify the server is running and URL is correct in Settings → Voice</li>
-        <li>If using browser native STT: Try Chrome — it has the best Web Speech API support</li>
+        <li>If using faster-whisper: Verify the server is running and URL is correct in Settings → Voice &amp; TTS</li>
+        <li>If using OpenAI Whisper STT: Verify your OpenAI API key is valid and has remaining credits</li>
+        <li>If using Groq STT: Verify your Groq API key is valid and the Groq service is reachable</li>
+        <li>If using Browser STT: Make sure you're using Chrome or Edge — Firefox and Safari have limited Web Speech API support</li>
         <li>On mobile: Make sure the PWA has microphone permissions in your device settings</li>
+        <li>On mobile over Tailscale: Use the HTTPS URL (<code>https://...ts.net:3457</code>) — browsers require HTTPS for microphone access</li>
       </ul>
 
       <h3>Voice Latency Too High</h3>
@@ -171,10 +176,11 @@ curl http://localhost:5002/api/tts -X POST \
       <p>If other devices on your network can't reach Uplink:</p>
       <ol>
         <li>Verify both devices are on the same Wi-Fi / LAN (or both on Tailscale)</li>
-        <li><strong>Check that Uplink is bound to <code>0.0.0.0</code></strong> — by default it only listens on localhost when auth is disabled. Set <code>UPLINK_HOST=0.0.0.0</code> in your environment or <code>.env</code> file. See <a href="remote-access.html#network-binding">Network Binding</a>.</li>
+        <li><strong>Check that Uplink is bound to <code>0.0.0.0</code></strong> — by default it only listens on localhost. Enable <strong>Network Access</strong> in <strong>Settings → Server</strong>, or set <code>UPLINK_HOST=0.0.0.0</code> in your environment or <code>.env</code> file. Enabling authentication (<code>UPLINK_AUTH_ENABLED=true</code>) also automatically binds to <code>0.0.0.0</code>. See <a href="remote-access.html#network-binding">Network Binding</a>.</li>
         <li>Check your firewall (see <a href="remote-access.html">Remote Access</a>)</li>
         <li>Try using the IP address directly — not hostname</li>
         <li>Make sure you're using port 3456 (or 3457 for Tailscale HTTPS)</li>
+        <li>If exposing to untrusted networks, enable authentication: set <code>UPLINK_AUTH_ENABLED=true</code> and <code>UPLINK_AUTH_TOKEN=&lt;your-long-random-token&gt;</code></li>
       </ol>
 
       <h3>Page Loads But "No Response Received"</h3>
@@ -235,6 +241,9 @@ GATEWAY_URL=http://100.85.40.53:23248</code></pre>
           </tbody>
         </table>
       </div>
+
+      <h2>Crash Recovery</h2>
+      <p>Uplink includes a built-in <strong>watchdog</strong> that automatically restarts the server if it crashes unexpectedly. If you notice Uplink went down and came back on its own, the watchdog handled it. Check the server logs for crash details — the watchdog logs restart events so you can investigate the root cause.</p>
 
       <h2>Getting Help</h2>
       <p>If none of the above resolves your issue:</p>

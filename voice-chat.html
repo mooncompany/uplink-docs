@@ -57,31 +57,75 @@
         <li><strong>Speech-to-Text (STT)</strong> — Your voice is transcribed to text, then sent to the AI as a regular message</li>
         <li><strong>Text-to-Speech (TTS)</strong> — The AI's text response is converted to audio and played back</li>
       </ul>
-      <p>Both are configured independently in Settings → Voice. You can use one without the other — for example, dictate messages but read responses, or type messages but hear responses spoken aloud.</p>
+      <p>Both are configured independently in Settings → Voice & TTS. You can use one without the other — for example, dictate messages but read responses, or type messages but hear responses spoken aloud.</p>
 
       <h2>TTS Engines</h2>
-      <p>Uplink supports three text-to-speech engines. You select which one to use in Settings → Voice, and provide the server URL if needed.</p>
+      <p>Uplink supports five text-to-speech engines: Edge TTS, OpenAI TTS, XTTS, ElevenLabs, and Piper. You select which one to use in Settings → Voice & TTS, and provide the server URL or API key if needed.</p>
+
+      <h3>ElevenLabs (Cloud)</h3>
+      <p>ElevenLabs is the primary TTS provider in Uplink. Cloud-based with the highest quality voice synthesis available — natural, expressive, and highly realistic.</p>
+      <ul>
+        <li>Highest quality voice output among all supported engines</li>
+        <li>Requires an <a href="https://elevenlabs.io" target="_blank">ElevenLabs</a> API key</li>
+        <li>Voice selection available in Settings → Voice & TTS</li>
+        <li>Requires internet connection</li>
+        <li>Pay-per-character pricing (free tier available with limits)</li>
+      </ul>
+
+      <h3>OpenAI TTS (Cloud)</h3>
+      <p>OpenAI's text-to-speech API. High quality, natural-sounding voices. Requires an OpenAI API key.</p>
+      <ul>
+        <li>10 voices: alloy, ash, ballad, coral, echo, fable, nova, onyx, sage, shimmer</li>
+        <li>Very natural prosody and intonation</li>
+        <li>Requires API key and has per-character pricing</li>
+        <li>Configure your API key in Settings → Voice & TTS</li>
+      </ul>
 
       <h3>Edge TTS (Free Cloud)</h3>
-      <p>Microsoft's Edge TTS API. Free, no API key required, excellent quality with many voice options. This is the easiest way to get started with voice.</p>
+      <p>Microsoft's Edge TTS API. Free, no API key required, excellent quality with many voice options. Requires installing the <code>node-edge-tts</code> package.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Install the Edge TTS dependency (required)
+npm install node-edge-tts</code></pre>
+      </div>
+
       <ul>
-        <li>No setup required — works out of the box</li>
         <li>Hundreds of voices across dozens of languages</li>
+        <li>No API key required — completely free</li>
         <li>Requires internet connection</li>
         <li>Slight latency due to cloud round-trip</li>
       </ul>
 
-      <h3>OpenAI TTS (Paid Cloud)</h3>
-      <p>OpenAI's text-to-speech API. High quality, natural-sounding voices. Requires an OpenAI API key.</p>
+      <h3>Piper (Local)</h3>
+      <p>A fast, local text-to-speech engine that runs entirely on your CPU — no GPU required. Great for offline or low-latency use cases with many available voice models.</p>
       <ul>
-        <li>6 voices: alloy, echo, fable, onyx, nova, shimmer</li>
-        <li>Very natural prosody and intonation</li>
-        <li>Requires API key and has per-character pricing</li>
-        <li>Configure your API key in Settings → Voice</li>
+        <li>Runs locally — no internet connection needed</li>
+        <li>Fast inference on CPU (no GPU required)</li>
+        <li>Many community voice models available in <code>.onnx</code> format</li>
+        <li>Requires the <code>PIPER_MODEL</code> environment variable pointing to the <code>.onnx</code> model file</li>
+        <li>Optional: <code>PIPER_EXECUTABLE</code> to specify a custom Piper binary path</li>
+        <li>Optional: <code>PIPER_CONFIG</code> to specify a custom config JSON file</li>
       </ul>
 
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Set the required environment variable before starting Uplink
+export PIPER_MODEL=/path/to/voice-model.onnx
+
+# Optional: custom Piper binary and config
+export PIPER_EXECUTABLE=/path/to/piper
+export PIPER_CONFIG=/path/to/voice-model.onnx.json</code></pre>
+      </div>
+
       <h3>Coqui XTTS (Local GPU)</h3>
-      <p>The highest quality option — runs entirely on your machine. Requires an NVIDIA GPU with CUDA support and a running XTTS server.</p>
+      <p>A high-quality local option — runs entirely on your machine. Requires an NVIDIA GPU with CUDA support and a running XTTS server.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -92,8 +136,7 @@
 pip install TTS
 python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2
 
-# Default runs on http://localhost:5002
-# Enter this URL in Uplink Settings → Voice → TTS Server URL</code></pre>
+# Enter the server URL in Uplink Settings → Voice & TTS → TTS Server URL</code></pre>
       </div>
 
       <div class="callout">
@@ -102,6 +145,27 @@ python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2
       </div>
 
       <h2>STT Engines</h2>
+      <p>Uplink supports four speech-to-text providers: faster-whisper (local, free), Groq Whisper (cloud, free tier), OpenAI Whisper (cloud, paid), and Browser STT (free, built-in).</p>
+
+      <h3>OpenAI Whisper (Cloud)</h3>
+      <p>OpenAI's cloud-based speech-to-text API. Highly accurate transcription across many languages using the <code>whisper-1</code> model.</p>
+      <ul>
+        <li>Uses your existing OpenAI API key</li>
+        <li>Model: <code>whisper-1</code></li>
+        <li>Excellent accuracy across many languages</li>
+        <li>Requires internet connection</li>
+        <li>Pay-per-minute pricing</li>
+      </ul>
+
+      <h3>Groq Whisper (Cloud)</h3>
+      <p>Groq's cloud-based speech-to-text service. Extremely fast transcription powered by Groq's LPU hardware, with a generous free tier.</p>
+      <ul>
+        <li>Requires a <a href="https://console.groq.com" target="_blank">Groq</a> API key</li>
+        <li>Model: <code>whisper-large-v3-turbo</code></li>
+        <li>Very fast transcription — low latency</li>
+        <li>Free tier available</li>
+        <li>Requires internet connection</li>
+      </ul>
 
       <h3>faster-whisper (Local)</h3>
       <p>A highly optimized implementation of OpenAI's Whisper model. Runs locally on CPU or GPU with excellent accuracy.</p>
@@ -117,14 +181,20 @@ pip install faster-whisper
 pip install whisper-asr-webservice
 python -m whisper_asr.webservice --model medium --device cuda
 
-# Enter the server URL in Uplink Settings → Voice → STT Server URL</code></pre>
+# Enter the server URL in Uplink Settings → Voice & TTS → STT Server URL</code></pre>
       </div>
 
-      <h3>Browser Native STT</h3>
-      <p>Uses the Web Speech API built into your browser. No setup required, but accuracy varies by browser and may require an internet connection (Chrome sends audio to Google's servers).</p>
+      <h3>Browser STT (Built-in)</h3>
+      <p>Built-in browser speech recognition using the Web Speech API. Free and requires no setup, but accuracy and language support varies by browser.</p>
+      <ul>
+        <li>No configuration needed — works out of the box</li>
+        <li>Free and built into modern browsers</li>
+        <li>Accuracy depends on browser and device</li>
+        <li>Requires internet connection (most browsers use cloud backend)</li>
+      </ul>
 
       <h2>Voice Configuration Summary</h2>
-      <p>All voice settings are in Settings → Voice. Here's what each field does:</p>
+      <p>All voice settings are in Settings → Voice & TTS. Here's what each field does:</p>
 
       <div class="table-wrap">
         <table>
@@ -132,13 +202,11 @@ python -m whisper_asr.webservice --model medium --device cuda
             <tr><th>Setting</th><th>Description</th><th>Default</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>TTS Engine</strong></td><td>Which TTS backend to use</td><td>Edge TTS</td></tr>
-            <tr><td><strong>TTS Server URL</strong></td><td>URL for XTTS server (if using local)</td><td><code>http://localhost:5002</code></td></tr>
+            <tr><td><strong>TTS Engine</strong></td><td>Which TTS backend to use</td><td>none (disabled)</td></tr>
+            <tr><td><strong>TTS Server URL</strong></td><td>URL for XTTS server (if using local)</td><td><em>localhost:8020</em></td></tr>
             <tr><td><strong>TTS Voice</strong></td><td>Voice name/ID for the selected engine</td><td>Depends on engine</td></tr>
-            <tr><td><strong>STT Engine</strong></td><td>Which STT backend to use</td><td>Browser native</td></tr>
-            <tr><td><strong>STT Server URL</strong></td><td>URL for faster-whisper server</td><td><code>http://localhost:9000</code></td></tr>
-            <tr><td><strong>Auto-play</strong></td><td>Automatically play TTS audio on response</td><td>On</td></tr>
-            <tr><td><strong>Voice Language</strong></td><td>Language for STT recognition</td><td>en</td></tr>
+            <tr><td><strong>STT Engine</strong></td><td>Which STT backend to use</td><td>none (disabled)</td></tr>
+            <tr><td><strong>STT Server URL</strong></td><td>URL for faster-whisper server</td><td><em>localhost:8000</em></td></tr>
           </tbody>
         </table>
       </div>

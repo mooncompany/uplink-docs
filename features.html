@@ -71,18 +71,19 @@
       </ul>
 
       <h2>Satellites</h2>
-      <p>Satellites are separate OpenClaw chat sessions — think of them like chat tabs. Each satellite is an independent conversation with its own history and context, letting you keep different topics or projects cleanly separated.</p>
+      <p>Satellites are independent AI conversations with isolated context. Each satellite maintains its own message history, system prompt, and context window — completely separate from your other conversations. Think of them as parallel chat sessions that don't interfere with each other.</p>
       <ul>
-        <li><strong>Independent conversations</strong> — Each satellite has its own message history and context window</li>
+        <li><strong>Independent AI conversations</strong> — Each satellite is a separate conversation with its own isolated context and memory</li>
+        <li><strong>Isolated context windows</strong> — Messages in one satellite don't affect the context or token count of another</li>
         <li><strong>Create and switch freely</strong> — Spin up new satellites and jump between them from the satellite switcher in the header</li>
-        <li><strong>Fresh context per tab</strong> — Starting a new satellite gives you a clean slate without losing your other conversations</li>
-        <li><strong>Organize by topic</strong> — Keep work, personal projects, and experiments in separate satellites</li>
-        <li><strong>Same gateway</strong> — All satellites route through your single OpenClaw gateway — they're separate conversations, not separate AI providers</li>
+        <li><strong>Clean slate on demand</strong> — Starting a new satellite gives you a fresh conversation without losing your other chats</li>
+        <li><strong>Same gateway</strong> — All satellites route through your single OpenClaw gateway — they're separate sessions, not separate AI providers</li>
+        <li><strong>Embeddable</strong> — Part of OpenClaw's embed and widget system, allowing chat interfaces to be embedded in other pages or applications</li>
       </ul>
 
       <div class="callout">
         <strong>ℹ Satellites ≠ Providers</strong>
-        Satellites are conversation-level separation, not model-level. They all use the same OpenClaw gateway and whatever model it's configured with. Think "tabs" not "backends."
+        Satellites are session-level separation, not model-level. They all use the same OpenClaw gateway and whatever model it's configured with. They're part of OpenClaw's embed/widget architecture.
       </div>
 
       <h2>Activity Panel</h2>
@@ -109,16 +110,20 @@
             <tr><th>Engine</th><th>Type</th><th>Runs Where</th><th>Notes</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Edge TTS</strong></td><td>Text-to-Speech</td><td>Cloud (free)</td><td>Microsoft's free TTS API, many voices</td></tr>
+            <tr><td><strong>ElevenLabs</strong></td><td>Text-to-Speech</td><td>Cloud</td><td>Highest quality, API key required</td></tr>
             <tr><td><strong>OpenAI TTS</strong></td><td>Text-to-Speech</td><td>Cloud (paid)</td><td>High quality, requires API key</td></tr>
-            <tr><td><strong>Coqui XTTS</strong></td><td>Text-to-Speech</td><td>Local (GPU)</td><td>Best quality, needs NVIDIA GPU</td></tr>
+            <tr><td><strong>Edge TTS</strong></td><td>Text-to-Speech</td><td>Cloud (free)</td><td>Microsoft's free TTS API, many voices</td></tr>
+            <tr><td><strong>Piper</strong></td><td>Text-to-Speech</td><td>Local (CPU)</td><td>Fast, lightweight, many voices</td></tr>
+            <tr><td><strong>Coqui XTTS</strong></td><td>Text-to-Speech</td><td>Local (GPU)</td><td>Best local quality, needs NVIDIA GPU</td></tr>
+            <tr><td><strong>OpenAI Whisper</strong></td><td>Speech-to-Text</td><td>Cloud</td><td>Uses OpenAI API key</td></tr>
+            <tr><td><strong>Groq</strong></td><td>Speech-to-Text</td><td>Cloud</td><td>Free tier available, fast</td></tr>
             <tr><td><strong>faster-whisper</strong></td><td>Speech-to-Text</td><td>Local</td><td>Fast, accurate, runs on CPU or GPU</td></tr>
           </tbody>
         </table>
       </div>
 
       <h2>End-to-End Encryption</h2>
-      <p>Uplink supports optional AES-256 encryption for all conversations. Enable it on first run or later in Settings → Security. When enabled:</p>
+      <p>Uplink supports optional AES-256 encryption for all conversations. Enable it on first run or later in Settings → Privacy. When enabled:</p>
       <ul>
         <li>All messages are encrypted at rest on the server</li>
         <li>Your encryption password never leaves your browser</li>
@@ -132,7 +137,7 @@
       </div>
 
       <h2>Themes</h2>
-      <p>Six built-in themes to match your vibe. Switch instantly in Settings → Display. See the <a href="themes.html">Themes</a> page for previews.</p>
+      <p>Five built-in themes to match your vibe. Switch instantly in Settings → General. See the <a href="themes.html">Themes</a> page for previews.</p>
 
       <div class="table-wrap">
         <table>
@@ -140,12 +145,11 @@
             <tr><th>Theme</th><th>Accent Color</th><th>Style</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Deep Space</strong></td><td>Cyan (#00f0ff)</td><td>Dark — the default</td></tr>
-            <tr><td><strong>Nebula</strong></td><td>Purple (#8b5cf6)</td><td>Dark</td></tr>
-            <tr><td><strong>Solar Flare</strong></td><td>Orange (#f97316)</td><td>Dark</td></tr>
-            <tr><td><strong>Aurora</strong></td><td>Green (#22c55e)</td><td>Dark</td></tr>
-            <tr><td><strong>Daylight Cream</strong></td><td>Blue (#3b82f6)</td><td>Light</td></tr>
-            <tr><td><strong>Midnight</strong></td><td>Slate (#64748b)</td><td>Dark, muted</td></tr>
+            <tr><td><strong>Midnight</strong></td><td>Cyan (#00f0ff)</td><td>Dark — the default</td></tr>
+            <tr><td><strong>Daylight</strong></td><td>Washed Red (#c84b4b)</td><td>Light — warm bg (#f5f0eb)</td></tr>
+            <tr><td><strong>Ember</strong></td><td>Amber (#f48c06)</td><td>Deep fire, dark navy bg (#03071e)</td></tr>
+            <tr><td><strong>Forest</strong></td><td>Sage (#a3b18a)</td><td>Earthy dark, dark green bg (#131813)</td></tr>
+            <tr><td><strong>Phantom</strong></td><td>Gray (#a0a0a0)</td><td>Monochrome grayscale</td></tr>
           </tbody>
         </table>
       </div>
@@ -169,6 +173,63 @@
         <strong>⚠ Other endpoints</strong>
         While the API format is OpenAI-compatible, pointing Uplink at a raw OpenAI endpoint, llama.cpp, or LM Studio will give you basic chat only. Features like satellites, session persistence, context tracking, and gateway status won't work without OpenClaw.
       </div>
+
+      <h2>Agents</h2>
+      <p>The Agents Panel lets you manage AI agent sessions, routing, and configuration directly from the Uplink interface. Access it to control how OpenClaw routes requests and configure agent-specific behavior.</p>
+      <ul>
+        <li><strong>Session management</strong> — View and manage active agent sessions</li>
+        <li><strong>Routing configuration</strong> — Control how requests are routed between different agents</li>
+        <li><strong>Agent settings</strong> — Configure agent-specific parameters and behavior</li>
+      </ul>
+
+      <h2>Watchdog Auto-Restart</h2>
+      <p>Uplink includes a watchdog process monitor that automatically restarts the server if it crashes or becomes unresponsive. Ensures high availability for long-running deployments.</p>
+      <ul>
+        <li><strong>Automatic recovery</strong> — Watchdog restarts Uplink if it crashes or hangs</li>
+        <li><strong>Health monitoring</strong> — Periodic checks ensure the server is responsive</li>
+        <li><strong>Minimal downtime</strong> — Rapid recovery keeps your AI assistant available</li>
+      </ul>
+
+      <h2>File Uploads</h2>
+      <p>Attach files directly to your messages for the AI to analyze. Uplink supports images, documents, and spreadsheets.</p>
+      <ul>
+        <li><strong>Images</strong> — Upload and attach images for vision-capable models to analyze</li>
+        <li><strong>Documents</strong> — Attach PDF and DOCX files for content extraction and discussion</li>
+        <li><strong>Spreadsheets</strong> — Upload Excel files for data analysis</li>
+        <li><strong>Drag and drop</strong> — Drop files directly into the chat input area</li>
+      </ul>
+
+      <h2>Push Notifications</h2>
+      <p>Stay informed even when Uplink isn't in the foreground. Web push notifications alert you when new messages arrive — useful when running long tasks or waiting for agent responses.</p>
+      <ul>
+        <li><strong>Browser push alerts</strong> — Get notified of new messages via your browser's notification system</li>
+        <li><strong>Works in background</strong> — Receive alerts even when the Uplink tab isn't active</li>
+        <li><strong>Configurable</strong> — Enable or disable in Settings → Notifications</li>
+      </ul>
+
+      <h2>Missed Messages</h2>
+      <p>Never lose track of messages received while you were away. The missed messages system queues messages that arrived while you were offline and lets you catch up when you return.</p>
+      <ul>
+        <li><strong>Offline queue</strong> — Messages received while you're disconnected are queued for later</li>
+        <li><strong>Catch-up view</strong> — Review all missed messages when you reconnect</li>
+        <li><strong>No data loss</strong> — Messages are persisted server-side until delivered</li>
+      </ul>
+
+      <h2>Conversation Sharing</h2>
+      <p>Generate public share links for your conversations. Useful for sharing interesting AI interactions, debugging sessions, or collaborative work with others.</p>
+      <ul>
+        <li><strong>Share links</strong> — Generate a public URL for any conversation</li>
+        <li><strong>Read-only access</strong> — Shared conversations are viewable but not editable</li>
+        <li><strong>Selective sharing</strong> — Choose which conversations to share</li>
+      </ul>
+
+      <h2>Keyboard Shortcuts</h2>
+      <p>Power users can navigate Uplink efficiently with keyboard shortcuts for common actions.</p>
+      <ul>
+        <li><strong>Quick navigation</strong> — Switch between satellites, toggle panels, and access settings without reaching for the mouse</li>
+        <li><strong>Chat controls</strong> — Send messages, clear input, and manage conversations with key combos</li>
+        <li><strong>Discoverable</strong> — View all available shortcuts from the keyboard shortcuts panel</li>
+      </ul>
 
       <div class="docs-footer">
         <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>

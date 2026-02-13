@@ -44,10 +44,10 @@
 
     <main class="docs-content">
       <h1>Configuration</h1>
-      <p class="subtitle">Uplink is configured through the in-app Settings panel. No config files to edit — everything is in the UI.</p>
+      <p class="subtitle">Uplink is configured through the in-app Settings panel. Runtime settings are persisted to <code>config.json</code> automatically — you rarely need to edit it by hand, but it's there if you need it.</p>
 
       <h2>The Settings Panel</h2>
-      <p>Open Settings from the gear icon in the sidebar or chat header. The panel is organized into five sections:</p>
+      <p>Open Settings from the gear icon in the sidebar or chat header. The panel is organized into eight sections:</p>
 
       <div class="table-wrap">
         <table>
@@ -55,26 +55,36 @@
             <tr><th>Section</th><th>What It Controls</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>General</strong></td><td>Gateway URL, language, default model, system prompt</td></tr>
-            <tr><td><strong>Voice</strong></td><td>TTS engine, STT engine, server URLs, auto-play settings</td></tr>
-            <tr><td><strong>Display</strong></td><td>Theme selection, font size, message density, timestamps</td></tr>
-            <tr><td><strong>Security</strong></td><td>Encryption toggle, password management, session timeout</td></tr>
+            <tr><td><strong>General</strong></td><td>Assistant name, theme, text size</td></tr>
+            <tr><td><strong>Connection</strong></td><td>Gateway URL, gateway token</td></tr>
+            <tr><td><strong>Server</strong></td><td>Watchdog, network access, restart</td></tr>
+            <tr><td><strong>Voice &amp; TTS</strong></td><td>TTS provider selection, voice settings, STT engine, server URLs</td></tr>
+            <tr><td><strong>Notifications</strong></td><td>Push notification toggle</td></tr>
+            <tr><td><strong>Privacy</strong></td><td>Encrypt history toggle, change password, cross-device sync (push/pull)</td></tr>
             <tr><td><strong>About</strong></td><td>Version info, credits, links to docs and GitHub</td></tr>
+            <tr><td><strong>Danger Zone</strong></td><td>Clear chat, reset all settings</td></tr>
           </tbody>
         </table>
       </div>
 
       <h2>General Settings</h2>
-      <p>The General section is where you configure how Uplink connects to <a href="https://openclaw.ai" target="_blank">OpenClaw</a>. The key setting is the <strong>Gateway URL</strong> — this points to your running OpenClaw gateway.</p>
+      <p>The General section lets you personalize Uplink's appearance and identity:</p>
+      <ul>
+        <li><strong>Assistant Name</strong> — The display name for the AI assistant</li>
+        <li><strong>Theme</strong> — Select from 5 built-in themes (see <a href="themes.html">Themes</a>)</li>
+        <li><strong>Text Size</strong> — Adjust the UI text size</li>
+      </ul>
+
+      <h2>Connection Settings</h2>
+      <p>The Connection section is where you configure how Uplink connects to <a href="https://openclaw.ai" target="_blank">OpenClaw</a>. The key settings are the <strong>Gateway URL</strong> and <strong>Gateway Token</strong>.</p>
 
       <div class="code-block">
         <div class="code-block-header">
           <span>example</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code>Gateway URL: http://localhost:5001/v1
-Model:       openclaw/default
-Temperature: 0.7</code></pre>
+        <pre><code>Gateway URL:   http://127.0.0.1:18789
+Gateway Token: (found in your OpenClaw config.yaml)</code></pre>
       </div>
 
       <p>The gateway URL is auto-detected if OpenClaw is running on the same machine. If you're running OpenClaw on a different host (or via Tailscale), update this to point to the correct address.</p>
@@ -84,36 +94,37 @@ Temperature: 0.7</code></pre>
         Uplink is built for OpenClaw. The gateway URL must point to a running OpenClaw instance — this is what provides AI model access, session persistence, streaming, and the satellite (multi-provider) system.
       </div>
 
-      <h2>Voice Settings</h2>
+      <h2>Voice &amp; TTS Settings</h2>
       <p>Voice configuration is covered in detail on the <a href="voice-chat.html">Voice Chat</a> page. The key fields here are:</p>
+
+      <h3>TTS Providers</h3>
       <ul>
-        <li><strong>TTS Engine</strong> — Choose between Edge TTS (free cloud), OpenAI TTS, or Coqui XTTS (local GPU)</li>
-        <li><strong>TTS Server URL</strong> — If using local XTTS, provide the URL of your running XTTS server</li>
-        <li><strong>STT Engine</strong> — faster-whisper (local) or browser native</li>
-        <li><strong>STT Server URL</strong> — URL of your faster-whisper server if running locally</li>
+        <li><strong>ElevenLabs</strong> — Cloud-based, requires API key. High-quality voice synthesis.</li>
+        <li><strong>OpenAI TTS</strong> — Cloud-based, requires API key.</li>
+        <li><strong>Edge TTS</strong> — Free cloud-based TTS. Requires <code>npm install node-edge-tts</code>.</li>
+        <li><strong>Piper</strong> — Local, runs on CPU. Fast and lightweight.</li>
+        <li><strong>XTTS / Local</strong> — Local, requires GPU. High-quality local voice cloning.</li>
+      </ul>
+
+      <h3>STT Providers</h3>
+      <ul>
+        <li><strong>faster-whisper</strong> — Local, self-hosted. Provide the URL of your running faster-whisper server.</li>
+        <li><strong>Groq Whisper</strong> — Cloud-based, free tier available.</li>
+        <li><strong>OpenAI Whisper</strong> — Cloud-based, requires API key.</li>
+        <li><strong>Browser STT</strong> — Free, built-in. Uses the browser's native Web Speech API (Chrome/Edge recommended).</li>
       </ul>
 
       <div class="callout">
         <strong>ℹ User-Provided Servers</strong>
-        Uplink does not bundle TTS/STT models. You provide your own server URLs. This keeps the install lightweight and lets you pick the exact models and hardware you want.
+        Uplink does not bundle TTS/STT models. You provide your own server URLs or API keys. This keeps the install lightweight and lets you pick the exact models and hardware you want.
       </div>
 
-      <h2>Display Settings</h2>
-      <p>Control the visual appearance of Uplink:</p>
-      <ul>
-        <li><strong>Theme</strong> — Select from 6 built-in themes (see <a href="themes.html">Themes</a>)</li>
-        <li><strong>Font Size</strong> — Small, medium, or large</li>
-        <li><strong>Message Density</strong> — Compact or comfortable spacing</li>
-        <li><strong>Show Timestamps</strong> — Toggle message timestamps</li>
-        <li><strong>Code Block Theme</strong> — Syntax highlighting style</li>
-      </ul>
-
-      <h2>Security Settings</h2>
+      <h2>Privacy Settings</h2>
       <p>Uplink supports optional end-to-end encryption with AES-256. When enabled, all conversations are encrypted at rest on the server.</p>
       <ul>
-        <li><strong>Enable Encryption</strong> — Toggle E2E encryption on/off</li>
-        <li><strong>Set Password</strong> — Create or change your encryption password</li>
-        <li><strong>Session Timeout</strong> — Auto-lock after inactivity (5 min, 15 min, 1 hour, never)</li>
+        <li><strong>Encrypt History</strong> — Toggle E2E encryption on/off</li>
+        <li><strong>Change Password</strong> — Create or change your encryption password</li>
+        <li><strong>Cross-Device Sync</strong> — Push your encrypted data to the server or pull it to another device. Requires encryption to be enabled.</li>
       </ul>
 
       <div class="callout warning">
@@ -138,14 +149,11 @@ Temperature: 0.7</code></pre>
 PORT=3456 node server.js
 
 # Set the gateway URL
-GATEWAY_URL=http://localhost:5001/v1 node server.js
-
-# Enable debug logging
-DEBUG=true node server.js</code></pre>
+GATEWAY_URL=http://127.0.0.1:18789 node server.js</code></pre>
       </div>
 
       <h2>Multi-Device Sync</h2>
-      <p>Uplink syncs conversations across devices via WebSocket. Any device connected to the same Uplink server sees the same conversations in real-time. There's no separate sync configuration — it works automatically.</p>
+      <p>Uplink supports syncing conversations across devices, but it is <strong>not automatic</strong>. To sync, you must first enable encryption in <strong>Settings → Privacy</strong>, then use the <strong>Push</strong> and <strong>Pull</strong> buttons to manually upload or download your encrypted data.</p>
       <p>To access from other devices, see <a href="remote-access.html">Remote Access</a>.</p>
 
       <div class="docs-footer">
