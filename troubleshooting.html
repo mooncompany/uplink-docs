@@ -93,6 +93,16 @@ rm -rf node_modules
 npm install</code></pre>
       </div>
 
+      <h3>Sharp Install Fails</h3>
+      <p><a href="https://sharp.pixelplumbing.com" target="_blank">Sharp</a> is an optional dependency used for image compression. If it fails to install with native build errors, that's OK — Uplink works fine without it. Images will just be sent at their original size.</p>
+      <p>If you want image compression and Sharp won't install:</p>
+      <ul>
+        <li><strong>macOS:</strong> <code>xcode-select --install</code> to get build tools, then retry <code>npm install sharp</code></li>
+        <li><strong>Windows:</strong> Install <a href="https://visualstudio.microsoft.com/visual-cpp-build-tools/" target="_blank">Visual C++ Build Tools</a>, then retry</li>
+        <li><strong>Linux / WSL2:</strong> <code>sudo apt install build-essential</code>, then retry</li>
+        <li><strong>Still failing:</strong> Skip it. Everything else works without Sharp.</li>
+      </ul>
+
       <h2>Messages Not Working</h2>
 
       <h3>Gateway Connection Failed</h3>
