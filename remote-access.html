@@ -212,8 +212,15 @@ GATEWAY_URL=http://100.85.40.53:23248</code></pre>
       </div>
 
       <div class="callout warning">
-        <strong>⚠ Security Warning</strong>
-        Uplink has optional token-based authentication. Set <code>UPLINK_AUTH_ENABLED=true</code> and <code>UPLINK_AUTH_TOKEN=&lt;your-long-random-token&gt;</code> to enable it. For internet-facing deployments, a VPN like Tailscale is still recommended as an additional layer. Never expose Uplink directly to the public internet via port forwarding without authentication enabled.
+        <strong>⚠ Security Warning & Authentication</strong>
+        <p><strong>Uplink has built-in authentication:</strong> Use the <code>UPLINK_AUTH_ENABLED</code> environment variable to enable Bearer token authentication. When enabled, all API requests require a valid Bearer token. Bearer tokens are configured in <strong>Uplink's Settings → Connection</strong> section, where you can generate and manage tokens for secure API access.</p>
+        <p><strong>To enable authentication:</strong></p>
+        <ul style="margin-top: 0.5rem;">
+          <li>Set <code>UPLINK_AUTH_ENABLED=true</code> in your environment or <code>.env</code> file</li>
+          <li>Set <code>UPLINK_AUTH_TOKEN=&lt;your-long-random-token&gt;</code> (or generate one in the UI)</li>
+          <li>All API requests must include the Bearer token in the Authorization header</li>
+        </ul>
+        <p style="margin-top: 0.5rem;">For internet-facing deployments, a VPN like Tailscale is still recommended as an additional security layer. Never expose Uplink directly to the public internet via port forwarding without authentication enabled.</p>
       </div>
 
       <h2>Multi-Device Sync</h2>
