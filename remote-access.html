@@ -45,27 +45,59 @@
 
     <main class="docs-content">
       <h1>Remote Access</h1>
-      <p class="subtitle">Access your Uplink instance from any device — phone, tablet, or another computer.</p>
+      <p class="subtitle">Access your Uplink instance from any device — phone, tablet, or another computer. Use it on the couch, at work, or on the go.</p>
 
       <h2>How It Works</h2>
-      <p>Uplink is a web server. By default it listens on <code>localhost:3456</code>, which means only the machine running it can access the UI. To use Uplink from other devices, you need to either access it over your local network (LAN) or set up a secure tunnel for remote access.</p>
+      <p>Uplink is a web server running on your machine. By default it listens on <code>localhost:3456</code>, which means only that machine can access the UI. To use Uplink from your phone or another device, you have two options:</p>
+      <ul>
+        <li><strong>LAN Access</strong> — same Wi-Fi network, zero setup</li>
+        <li><strong>Tailscale</strong> — works from anywhere, encrypted, with auto-HTTPS</li>
+      </ul>
 
-      <h2>LAN Access</h2>
-      <p>The simplest option. If your phone/tablet/laptop is on the same Wi-Fi network as the machine running Uplink, you can access it directly via the host's LAN IP.</p>
-
-      <div class="callout">
-        <strong>🔌 Network Access Toggle</strong>
-        By default, Uplink binds to <code>127.0.0.1</code> (localhost only), so other devices cannot connect. To enable LAN access, go to <strong>Settings → Server</strong> and turn on the <strong>Network Access</strong> toggle. Alternatively, set <code>UPLINK_HOST=0.0.0.0</code> in your environment or <code>.env</code> file. Enabling authentication (<code>UPLINK_AUTH_ENABLED=true</code>) also automatically binds to <code>0.0.0.0</code>.
+      <h2>Quick Comparison</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Where</th><th>Voice Chat</th><th>Setup</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>LAN IP</strong></td><td>Same network</td><td>❌ No mic (HTTP)</td><td>Toggle in Settings</td></tr>
+            <tr><td><strong>Tailscale</strong></td><td>Anywhere</td><td>✅ Full (auto-HTTPS)</td><td>~5 minutes</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <h3>Find Your LAN IP</h3>
+      <div class="callout">
+        <strong>💡 Recommendation</strong>
+        If you want voice chat on mobile or access from outside your home, use Tailscale. It's free for personal use (up to 100 devices), takes 5 minutes to set up, and Uplink auto-detects it with zero configuration.
+      </div>
+
+      <!-- ═══════════════════════════════════════════════ -->
+
+      <h2>Option 1: LAN Access</h2>
+      <p>The simplest option. If your phone and computer are on the same Wi-Fi, you can connect directly.</p>
+
+      <h3>Step 1: Enable Network Access</h3>
+      <p>By default, Uplink only listens on localhost. You need to open it up to your network.</p>
+      <p><strong>Easiest way:</strong> Go to <strong>Settings → Server</strong> in Uplink and turn on the <strong>Network Access</strong> toggle.</p>
+      <p><strong>Or via environment:</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>.env or environment variable</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>UPLINK_HOST=0.0.0.0</code></pre>
+      </div>
+
+      <h3>Step 2: Find Your LAN IP</h3>
       <div class="code-block">
         <div class="code-block-header">
           <span>Windows PowerShell</span>
           <button class="copy-btn">Copy</button>
         </div>
         <pre><code>ipconfig | findstr "IPv4"
-# Example output: IPv4 Address. . . : 192.168.1.100</code></pre>
+# Example: IPv4 Address. . . : 192.168.1.100</code></pre>
       </div>
 
       <div class="code-block">
@@ -73,102 +105,132 @@
           <span>macOS / Linux</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code>hostname -I  # Linux
+        <pre><code>hostname -I          # Linux
 ipconfig getifaddr en0  # macOS
-# Example output: 192.168.1.100</code></pre>
+# Example: 192.168.1.100</code></pre>
       </div>
 
-      <h3>Connect from Another Device</h3>
-      <p>Open a browser on your phone or other device and navigate to:</p>
-
+      <h3>Step 3: Connect</h3>
+      <p>On your phone or other device, open a browser and go to:</p>
       <div class="code-block">
         <div class="code-block-header">
-          <span>url</span>
+          <span>URL</span>
           <button class="copy-btn">Copy</button>
         </div>
         <pre><code>http://192.168.1.100:3456</code></pre>
       </div>
 
-      <p>Replace the IP with your actual LAN address. That's it — you'll see the full Uplink interface. Conversations sync in real-time via WebSocket.</p>
-
-      <div class="callout">
-        <strong>📱 PWA Tip</strong>
-        On mobile, use your browser's "Add to Home Screen" option to install Uplink as a Progressive Web App. It'll look and feel like a native app — full screen, no browser chrome.
+      <div class="callout warning">
+        <strong>⚠ LAN Limitation: No Voice Chat</strong>
+        Browsers require HTTPS for microphone access. LAN connections use plain HTTP, so voice chat won't work. Use Tailscale if you need voice on mobile.
       </div>
 
-      <h2>Tailscale (Recommended for Remote)</h2>
-      <p>For accessing Uplink outside your home network, <a href="https://tailscale.com" target="_blank">Tailscale</a> is the recommended approach. It creates a secure mesh VPN between your devices with zero configuration — no port forwarding, no dynamic DNS, no firewall rules.</p>
+      <!-- ═══════════════════════════════════════════════ -->
 
-      <h3>Setup</h3>
-      <ol>
-        <li>Install Tailscale on the machine running Uplink</li>
-        <li>Install Tailscale on your phone/laptop/remote device</li>
-        <li>Sign in with the same account on both devices</li>
-        <li>Access Uplink using the Tailscale IP (usually <code>100.x.y.z:3456</code>)</li>
-      </ol>
+      <h2>Option 2: Tailscale (Recommended)</h2>
+      <p><a href="https://tailscale.com" target="_blank">Tailscale</a> creates a secure mesh VPN between your devices. No port forwarding, no dynamic DNS, no firewall rules. Uplink auto-detects Tailscale and provisions HTTPS certificates — enabling voice chat, camera, and all browser APIs that require a secure context.</p>
 
-      <div class="code-block">
-        <div class="code-block-header">
-          <span>bash</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code># Check your Tailscale IP
-tailscale ip -4
-# Example: 100.64.0.1
-
-# Access Uplink from any Tailscale-connected device:
-# http://100.64.0.1:3456</code></pre>
-      </div>
-
-      <h3>Network Binding</h3>
-      <p>By default, Uplink binds to <code>127.0.0.1</code> (localhost only). This is a security measure — but it also means Tailscale and LAN devices can't connect. You can enable network access in one of three ways:</p>
+      <h3>Step 1: Install Tailscale</h3>
+      <p>Install on <strong>both</strong> the machine running Uplink and your phone/remote device.</p>
       <ul>
-        <li><strong>Settings → Server:</strong> Turn on the <strong>Network Access</strong> toggle in the UI</li>
-        <li><strong>Environment variable:</strong> Set <code>UPLINK_HOST=0.0.0.0</code></li>
-        <li><strong>Authentication:</strong> Enabling <code>UPLINK_AUTH_ENABLED=true</code> automatically binds to <code>0.0.0.0</code></li>
+        <li><strong>Desktop:</strong> <a href="https://tailscale.com/download" target="_blank">tailscale.com/download</a> — Windows, macOS, Linux</li>
+        <li><strong>Phone:</strong> Search "Tailscale" in the App Store (iOS) or Play Store (Android)</li>
       </ul>
+      <p>Sign in with the same account on both devices (Google, Microsoft, GitHub, etc.).</p>
 
+      <h3>Step 2: Enable Network Access in Uplink</h3>
+      <p>Same as LAN — Uplink needs to listen on <code>0.0.0.0</code> so Tailscale connections can reach it.</p>
+      <p>Go to <strong>Settings → Server → Network Access</strong> and turn it on. Or:</p>
       <div class="code-block">
         <div class="code-block-header">
-          <span>bash</span>
+          <span>.env</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code># Option 1: Environment variable
-UPLINK_HOST=0.0.0.0 uplink-chat start
-
-# Option 2: PowerShell (Windows)
-$env:UPLINK_HOST="0.0.0.0"; uplink-chat start
-
-# Option 3: Add to your .env file
-UPLINK_HOST=0.0.0.0</code></pre>
+        <pre><code>UPLINK_HOST=0.0.0.0</code></pre>
       </div>
 
       <div class="callout">
         <strong>💡 Tip</strong>
-        Enabling authentication (<code>UPLINK_AUTH_ENABLED=true</code>) automatically binds to <code>0.0.0.0</code>, so you won't need to set <code>UPLINK_HOST</code> separately.
+        Enabling authentication (<code>UPLINK_AUTH_ENABLED=true</code>) automatically sets <code>UPLINK_HOST=0.0.0.0</code>, so you don't need to set it separately.
       </div>
 
-      <h3>Tailscale Auto-HTTPS</h3>
-      <p>Uplink automatically detects Tailscale and serves HTTPS with valid certificates — no manual cert setup needed. When Tailscale is detected, Uplink provisions a TLS certificate and starts an HTTPS server on port 3457. This enables microphone and camera access on mobile (browsers require HTTPS for media APIs).</p>
-
+      <h3>Step 3: Find Your Tailscale Address</h3>
       <div class="code-block">
         <div class="code-block-header">
-          <span>url</span>
+          <span>Terminal</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code># Tailscale HTTPS (enables mic/camera on mobile)
-https://your-hostname.tailnet-name.ts.net:3457
+        <pre><code># Get your Tailscale IP
+tailscale ip -4
+# Example: 100.85.40.53
 
-# Plain HTTP (no mic/camera on mobile)
-http://100.x.x.x:3456</code></pre>
+# Get your Tailscale hostname (for HTTPS)
+tailscale status
+# Look for your machine name, e.g. "na8"
+# Your FQDN will be: na8.tail8b977a.ts.net</code></pre>
       </div>
 
+      <p>You can also find your Tailscale IP and hostname in the Tailscale app on your desktop or in the <a href="https://login.tailscale.com/admin/machines" target="_blank">Tailscale admin console</a>.</p>
+
+      <h3>Step 4: Connect</h3>
+      <p>You have two URLs to choose from:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>URL</th><th>Voice Chat</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>https://your-hostname.ts.net:3457</code></td>
+              <td>✅ Yes</td>
+              <td>Auto-HTTPS, full features, use this for mobile</td>
+            </tr>
+            <tr>
+              <td><code>http://100.x.x.x:3456</code></td>
+              <td>❌ No</td>
+              <td>Plain HTTP, text chat only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <strong>🔒 Auto-HTTPS: How It Works</strong>
+        When Uplink starts, it checks if Tailscale is running. If detected, it automatically:
+        <ol style="margin-top: 0.5rem; margin-bottom: 0;">
+          <li>Gets your machine's Tailscale FQDN (e.g. <code>na8.tail8b977a.ts.net</code>)</li>
+          <li>Provisions a valid TLS certificate via <code>tailscale cert</code></li>
+          <li>Starts an HTTPS server on port <strong>3457</strong></li>
+          <li>Refreshes the certificate every 12 hours</li>
+        </ol>
+        <p style="margin-top: 0.5rem;">No manual certificate setup required. You'll see the HTTPS URL in the Uplink server logs at startup.</p>
+      </div>
+
+      <h3>Step 5: Install as PWA (Mobile)</h3>
+      <p>For the best experience on your phone, install Uplink as a Progressive Web App:</p>
+      <ol>
+        <li>Open the Tailscale HTTPS URL in your phone's browser (Safari on iOS, Chrome on Android)</li>
+        <li><strong>iOS:</strong> Tap the Share button → "Add to Home Screen"</li>
+        <li><strong>Android:</strong> Tap the menu (⋮) → "Install app" or "Add to Home Screen"</li>
+        <li>Uplink now appears as a standalone app — full screen, no browser chrome</li>
+      </ol>
+
+      <div class="callout warning">
+        <strong>⚠ Important: Install the PWA from the HTTPS URL</strong>
+        If you install the PWA from the plain HTTP URL (<code>http://100.x.x.x:3456</code>), voice chat and push notifications won't work because the PWA will be locked to that insecure origin. Always use the <code>https://</code> Tailscale URL when adding to your home screen.
+      </div>
+
+      <!-- ═══════════════════════════════════════════════ -->
+
+      <h2>Configuration</h2>
+
       <h3>Gateway URL Must Stay Localhost</h3>
-      <p>A common mistake: setting <code>GATEWAY_URL</code> to your Tailscale IP instead of localhost. The OpenClaw gateway only listens on <code>127.0.0.1</code> — Uplink proxies requests to it locally, regardless of how remote clients connect to Uplink.</p>
+      <p>This is the most common mistake. The OpenClaw gateway only listens on <code>127.0.0.1</code>. Uplink connects to it locally, then proxies requests to remote clients. <strong>Never</strong> point <code>GATEWAY_URL</code> at your Tailscale or LAN IP.</p>
 
       <div class="code-block">
         <div class="code-block-header">
-          <span>.env</span>
+          <span>config.json or .env</span>
           <button class="copy-btn">Copy</button>
         </div>
         <pre><code># ✅ Correct — gateway is always local
@@ -177,31 +239,59 @@ GATEWAY_URL=http://127.0.0.1:23248
 # ❌ Wrong — gateway doesn't listen on Tailscale IP
 GATEWAY_URL=http://100.85.40.53:23248</code></pre>
       </div>
+      <p>If <code>GATEWAY_URL</code> points to a non-localhost address, the UI will load but messages will fail with "No response received."</p>
 
-      <p>If <code>GATEWAY_URL</code> points to a non-localhost address, you'll see the Uplink UI load normally but messages will fail with "No response received."</p>
+      <h3>Authentication</h3>
+      <p>When accessing Uplink over a network (LAN or Tailscale), you should enable authentication to prevent unauthorized access.</p>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Method</th><th>Pros</th><th>Cons</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>LAN IP</strong></td><td>Zero setup, instant</td><td>Same network only, IP may change</td></tr>
-            <tr><td><strong>Tailscale</strong></td><td>Works anywhere, encrypted, stable IP</td><td>Requires Tailscale on both devices</td></tr>
-            <tr><td><strong>Port forwarding</strong></td><td>Works from internet</td><td>Security risk, complex, ISP may block</td></tr>
-          </tbody>
-        </table>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>.env</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Enable auth (also auto-binds to 0.0.0.0)
+UPLINK_AUTH_ENABLED=true
+
+# Set a strong token (or generate one in Settings → Connection)
+UPLINK_AUTH_TOKEN=your-long-random-token-here</code></pre>
       </div>
 
+      <p>When auth is enabled, all API requests require the Bearer token. The Uplink UI handles this automatically after you enter the token once.</p>
+
+      <div class="callout">
+        <strong>🛡️ Tailscale + Auth = Best of Both</strong>
+        Tailscale encrypts all traffic and only your devices can connect. Adding Uplink auth on top means even if someone joins your Tailscale network, they still need the token. Belt and suspenders.
+      </div>
+
+      <h3>Allowed Origins</h3>
+      <p>Uplink validates WebSocket and API request origins for security. Tailscale domains (<code>*.ts.net</code>) are automatically allowed. If you're using a custom domain or reverse proxy, you may need to add it to the allowed origins in your <code>config.json</code>:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>config.json</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>{
+  "allowedOrigins": [
+    "http://localhost:3456",
+    "https://your-hostname.ts.net:3457"
+  ]
+}</code></pre>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════ -->
+
       <h2>Firewall Notes</h2>
-      <p>If devices on your LAN can't connect, your firewall may be blocking port 3456. Here's how to allow it:</p>
+      <p>Tailscale handles its own firewall rules automatically. For LAN access, you may need to allow port 3456 (and 3457 for HTTPS):</p>
 
       <div class="code-block">
         <div class="code-block-header">
           <span>Windows PowerShell (Admin)</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code>New-NetFirewallRule -DisplayName "Uplink" -Direction Inbound -Port 3456 -Protocol TCP -Action Allow</code></pre>
+        <pre><code># Allow Uplink HTTP + HTTPS
+New-NetFirewallRule -DisplayName "Uplink HTTP" -Direction Inbound -Port 3456 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Uplink HTTPS" -Direction Inbound -Port 3457 -Protocol TCP -Action Allow</code></pre>
       </div>
 
       <div class="code-block">
@@ -209,23 +299,59 @@ GATEWAY_URL=http://100.85.40.53:23248</code></pre>
           <span>Linux (ufw)</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code>sudo ufw allow 3456/tcp</code></pre>
+        <pre><code>sudo ufw allow 3456/tcp
+sudo ufw allow 3457/tcp</code></pre>
       </div>
 
-      <div class="callout warning">
-        <strong>⚠ Security Warning & Authentication</strong>
-        <p><strong>Uplink has built-in authentication:</strong> Use the <code>UPLINK_AUTH_ENABLED</code> environment variable to enable Bearer token authentication. When enabled, all API requests require a valid Bearer token. Bearer tokens are configured in <strong>Uplink's Settings → Connection</strong> section, where you can generate and manage tokens for secure API access.</p>
-        <p><strong>To enable authentication:</strong></p>
-        <ul style="margin-top: 0.5rem;">
-          <li>Set <code>UPLINK_AUTH_ENABLED=true</code> in your environment or <code>.env</code> file</li>
-          <li>Set <code>UPLINK_AUTH_TOKEN=&lt;your-long-random-token&gt;</code> (or generate one in the UI)</li>
-          <li>All API requests must include the Bearer token in the Authorization header</li>
-        </ul>
-        <p style="margin-top: 0.5rem;">For internet-facing deployments, a VPN like Tailscale is still recommended as an additional security layer. Never expose Uplink directly to the public internet via port forwarding without authentication enabled.</p>
-      </div>
+      <!-- ═══════════════════════════════════════════════ -->
 
       <h2>Multi-Device Sync</h2>
-      <p>All devices connected to the same Uplink server share conversations in real-time. When you send a message from your phone, it appears instantly on your desktop — and vice versa. This is handled automatically via WebSocket; no additional configuration needed.</p>
+      <p>All devices connected to the same Uplink server share conversations in real-time. Send a message from your phone, it appears instantly on your desktop — and vice versa. This works automatically via WebSocket, no configuration needed.</p>
+      <p>Features that sync across devices:</p>
+      <ul>
+        <li>Chat messages (both directions)</li>
+        <li>Typing/thinking indicators</li>
+        <li>Tool call activity</li>
+        <li>Token usage stats</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════ -->
+
+      <h2>Troubleshooting</h2>
+
+      <h3>"No response received" errors</h3>
+      <p>Check that <code>GATEWAY_URL</code> is set to <code>http://127.0.0.1:23248</code> (or whatever port your OpenClaw gateway uses). It must be localhost.</p>
+
+      <h3>Can't connect from phone</h3>
+      <ul>
+        <li>Verify <strong>Network Access</strong> is enabled in Settings → Server (or <code>UPLINK_HOST=0.0.0.0</code>)</li>
+        <li>Check that both devices are on the same Tailscale network (or same Wi-Fi for LAN)</li>
+        <li>Try the Tailscale IP directly: <code>http://100.x.x.x:3456</code></li>
+        <li>Check firewall rules (see above)</li>
+      </ul>
+
+      <h3>Voice chat not working on mobile</h3>
+      <ul>
+        <li>You must use the HTTPS URL: <code>https://hostname.ts.net:3457</code></li>
+        <li>Plain HTTP (<code>http://</code>) blocks microphone access in all browsers</li>
+        <li>If you installed the PWA from an HTTP URL, delete it and reinstall from the HTTPS URL</li>
+        <li>Check that Tailscale is running on the server — Uplink logs will show "Tailscale HTTPS: https://..." at startup</li>
+      </ul>
+
+      <h3>HTTPS certificate errors</h3>
+      <ul>
+        <li>Tailscale must be running and logged in on the server</li>
+        <li>The <code>tailscale cert</code> command must work — try running it manually</li>
+        <li>Certificates refresh automatically every 12 hours; restart Uplink if you just set up Tailscale</li>
+        <li>Check Uplink server logs for <code>[Tailscale]</code> messages</li>
+      </ul>
+
+      <h3>PWA won't install</h3>
+      <ul>
+        <li>iOS: Must use Safari (other browsers can't install PWAs on iOS)</li>
+        <li>Android: Use Chrome or Edge</li>
+        <li>The page must be served over HTTPS for the install prompt to appear</li>
+      </ul>
 
       <div class="docs-footer">
         <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
@@ -236,4 +362,3 @@ GATEWAY_URL=http://100.85.40.53:23248</code></pre>
   <script src="js/docs.js"></script>
 </body>
 </html>
-

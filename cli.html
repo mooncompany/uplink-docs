@@ -45,10 +45,9 @@
 
     <main class="docs-content">
       <h1>CLI Reference</h1>
-      <p class="subtitle">Control Uplink from the command line — start, stop, update, and monitor your server.</p>
+      <p class="subtitle">Manage your Uplink server from the command line.</p>
 
-      <h2>Overview</h2>
-      <p>Uplink ships with a CLI tool called <code>uplink-chat</code>. It's installed automatically when you run <code>npm install -g @mooncompany/uplink-chat</code> or use <code>npx</code>.</p>
+      <p>Uplink ships with a CLI tool (<code>uplink-chat</code>) that handles starting, stopping, monitoring, and updating the server. If you installed globally via npm, the command is available everywhere. With <code>npx</code>, prefix commands with <code>npx</code>.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -58,41 +57,55 @@
         <pre><code>uplink-chat [command] [options]</code></pre>
       </div>
 
-      <h2>Commands</h2>
-
-      <h3>start</h3>
-      <p>Start the Uplink server. This is the default command — running <code>uplink-chat</code> with no arguments does the same thing.</p>
+      <!-- ── START ── -->
+      <h2 id="start">start</h2>
+      <p>Start the Uplink server. This is the default command — running <code>uplink-chat</code> with no arguments is the same as <code>uplink-chat start</code>.</p>
 
       <div class="code-block">
         <div class="code-block-header">
           <span>bash</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code># Start in foreground (with auto-restart watchdog)
-uplink-chat start
+        <pre><code># Foreground (default) — auto-restart via watchdog
+uplink-chat
 
-# Start in background (daemon mode)
+# Background (daemon mode)
 uplink-chat start --detach
 
-# Start without the watchdog (raw server, no auto-restart)
-uplink-chat start --no-watchdog
+# Custom port
+uplink-chat --port 8080
 
-# Start on a custom port
-uplink-chat start --port 8080
+# Bind to specific host
+uplink-chat --host 127.0.0.1
 
-# Start bound to all interfaces
-uplink-chat start --host 0.0.0.0</code></pre>
+# Raw mode — no watchdog, no auto-restart
+uplink-chat --no-watchdog</code></pre>
       </div>
 
-      <p>By default, Uplink starts with a <strong>watchdog</strong> that automatically restarts the server if it crashes. The watchdog uses exponential backoff to prevent restart loops.</p>
+      <p>By default, Uplink starts with a <strong>watchdog</strong> that automatically restarts the server if it crashes. The watchdog uses exponential backoff (1s → 2s → 4s → max 30s) and resets after 60 seconds of stable uptime.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Option</th><th>Description</th><th>Default</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--port N</code></td><td>Port to listen on</td><td>3456</td></tr>
+            <tr><td><code>--host H</code></td><td>Host/IP to bind to</td><td>0.0.0.0</td></tr>
+            <tr><td><code>--detach</code>, <code>-d</code></td><td>Run in background (daemon mode)</td><td>off</td></tr>
+            <tr><td><code>--no-watchdog</code></td><td>Disable auto-restart watchdog</td><td>off</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="callout">
-        <strong>💡 Tip</strong>
-        Use <code>--detach</code> (or <code>-d</code>) to run Uplink in the background. It will keep running even after you close your terminal. Stop it with <code>uplink-chat stop</code>.
+        <strong>💡 Foreground vs. Detached</strong>
+        <p style="margin-top: 8px; margin-bottom: 0;">In <strong>foreground mode</strong> (default), the server logs to your terminal and stops when you close it. In <strong>detached mode</strong> (<code>-d</code>), it runs silently in the background — ideal for always-on setups. Both modes include the watchdog by default.</p>
       </div>
 
-      <h3>stop</h3>
-      <p>Stop a running Uplink server. Handles both foreground and daemon (detached) mode.</p>
+      <!-- ── STOP ── -->
+      <h2 id="stop">stop</h2>
+      <p>Stop a running Uplink server. Handles both foreground and daemon (watchdog) processes.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -102,10 +115,11 @@ uplink-chat start --host 0.0.0.0</code></pre>
         <pre><code>uplink-chat stop</code></pre>
       </div>
 
-      <p>If Uplink is running with a watchdog, this stops the watchdog first (which also stops the server). PID files are cleaned up automatically.</p>
+      <p>If the server was started with <code>--detach</code>, this stops the watchdog (which also stops the server). If it was started in foreground mode, it sends a SIGTERM to the server process directly.</p>
 
-      <h3>status</h3>
-      <p>Check if Uplink is currently running and get details about the process.</p>
+      <!-- ── STATUS ── -->
+      <h2 id="status">status</h2>
+      <p>Check whether Uplink is running and display process info.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -115,14 +129,7 @@ uplink-chat start --host 0.0.0.0</code></pre>
         <pre><code>uplink-chat status</code></pre>
       </div>
 
-      <p>Output includes:</p>
-      <ul>
-        <li>Whether Uplink is running (and in which mode)</li>
-        <li>Watchdog PID and server PID</li>
-        <li>Uptime</li>
-        <li>Number of automatic restarts (if any)</li>
-        <li>Current backoff duration (if the server has been crashing)</li>
-      </ul>
+      <p>Example output when running in watchdog mode:</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -131,13 +138,16 @@ uplink-chat start --host 0.0.0.0</code></pre>
         </div>
         <pre><code>⬡ Uplink is running (watchdog mode)
   Watchdog PID: 12345
-  Server PID:   12350
-  Uptime:       2h 15m 30s
+  Server PID:   12347
+  Uptime:       2h 14m 30s
   Restarts:     0</code></pre>
       </div>
 
-      <h3>update</h3>
-      <p>Update Uplink to the latest version from npm. If the server is running, it will be stopped before the update and restarted automatically afterward.</p>
+      <p>If the server has crashed and restarted, you'll see the restart count and current backoff interval.</p>
+
+      <!-- ── UPDATE ── -->
+      <h2 id="update">update</h2>
+      <p>Update Uplink to the latest version from npm.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -149,91 +159,149 @@ uplink-chat start --host 0.0.0.0</code></pre>
 
       <p>The update command:</p>
       <ol>
-        <li>Shows the current version</li>
+        <li>Checks the current version</li>
         <li>Stops the server if it's running</li>
         <li>Runs <code>npm update -g @mooncompany/uplink-chat</code></li>
-        <li>Displays the version change (e.g. <code>v0.5.1 → v0.5.2</code>)</li>
-        <li>Restarts the server if it was running before</li>
+        <li>Reports the version change (or confirms you're already up to date)</li>
+        <li>Restarts the server if it was running before the update</li>
       </ol>
 
       <div class="callout warning">
-        <strong>⚠ Note</strong>
-        If the update fails, Uplink will attempt to restart the previous version so you're never left with a dead server.
+        <strong>⚠ Permissions</strong>
+        <p style="margin-top: 8px; margin-bottom: 0;">If you installed Uplink globally with <code>sudo</code>, the update may also need elevated permissions. On macOS/Linux, use <code>sudo uplink-chat update</code>. On Windows, run your terminal as Administrator.</p>
       </div>
 
-      <h2>Options</h2>
-
+      <!-- ── OTHER FLAGS ── -->
+      <h2 id="flags">Other Flags</h2>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Option</th><th>Description</th><th>Default</th></tr>
+            <tr><th>Flag</th><th>Description</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>--port N</code></td><td>Port to listen on</td><td><code>3456</code></td></tr>
-            <tr><td><code>--host H</code></td><td>Host/interface to bind to</td><td><code>0.0.0.0</code></td></tr>
-            <tr><td><code>--detach</code>, <code>-d</code></td><td>Run in background (daemon mode)</td><td>Off</td></tr>
-            <tr><td><code>--no-watchdog</code></td><td>Disable auto-restart watchdog</td><td>Off</td></tr>
-            <tr><td><code>-v</code>, <code>--version</code></td><td>Show version number</td><td>—</td></tr>
-            <tr><td><code>-h</code>, <code>--help</code></td><td>Show help message</td><td>—</td></tr>
+            <tr><td><code>--version</code>, <code>-v</code></td><td>Print the installed version and exit</td></tr>
+            <tr><td><code>--help</code>, <code>-h</code></td><td>Show usage help and exit</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>Examples</h2>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Check version
+uplink-chat -v
+# → uplink-chat v0.5.1
+
+# Show help
+uplink-chat --help</code></pre>
+      </div>
+
+      <!-- ── WATCHDOG ── -->
+      <h2 id="watchdog">Watchdog</h2>
+      <p>The watchdog is a lightweight supervisor that restarts the Uplink server if it exits unexpectedly. It's enabled by default in both foreground and detached modes.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Behavior</th><th>Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Initial restart delay</td><td>1 second</td></tr>
+            <tr><td>Backoff multiplier</td><td>2×</td></tr>
+            <tr><td>Maximum backoff</td><td>30 seconds</td></tr>
+            <tr><td>Backoff reset after stable uptime</td><td>60 seconds</td></tr>
+            <tr><td>Clean exit (code 0) behavior</td><td>Does not restart</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The watchdog writes its state to <code>.uplink-watchdog.json</code> in the Uplink root directory, which is how <code>uplink-chat status</code> reports uptime and restart counts.</p>
+
+      <p>To disable the watchdog entirely, pass <code>--no-watchdog</code>:</p>
 
       <div class="code-block">
         <div class="code-block-header">
           <span>bash</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code># Quick start with npx (no install needed)
-npx uplink-chat
+        <pre><code>uplink-chat --no-watchdog</code></pre>
+      </div>
 
-# Install globally and run
-npm install -g @mooncompany/uplink-chat
-uplink-chat
+      <!-- ── EXAMPLES ── -->
+      <h2 id="examples">Examples</h2>
 
-# Run as a background daemon on port 8080
-uplink-chat start --detach --port 8080
+      <h3>Run on a different port</h3>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>uplink-chat --port 8080</code></pre>
+      </div>
 
-# Check status
+      <h3>Always-on daemon</h3>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Start in background
+uplink-chat start -d
+
+# Check on it later
 uplink-chat status
 
-# Update to latest version
-uplink-chat update
-
-# Stop the server
-uplink-chat stop
-
-# Check version
-uplink-chat -v</code></pre>
+# Stop when needed
+uplink-chat stop</code></pre>
       </div>
 
-      <h2>Watchdog</h2>
-      <p>By default, Uplink runs with a watchdog process that monitors the server and restarts it if it crashes. This is useful for long-running deployments where you want Uplink to stay up without manual intervention.</p>
-
-      <p>The watchdog uses <strong>exponential backoff</strong> — if the server keeps crashing, restart delays increase to avoid a tight crash loop. The backoff resets after the server runs stably for a period of time.</p>
-
-      <p>You can see the watchdog's state (restart count, backoff duration) with <code>uplink-chat status</code>.</p>
-
-      <p>To disable the watchdog (e.g. during development), use <code>--no-watchdog</code>:</p>
-
+      <h3>Quick one-off with npx</h3>
       <div class="code-block">
         <div class="code-block-header">
           <span>bash</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code>uplink-chat start --no-watchdog</code></pre>
+        <pre><code># Run without installing
+npx @mooncompany/uplink-chat
+
+# Or with short name
+npx uplink-chat</code></pre>
       </div>
 
-      <h2>Process Management</h2>
-      <p>Uplink stores PID files in its install directory:</p>
+      <h3>Update and restart</h3>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># One command — stops, updates, restarts
+uplink-chat update</code></pre>
+      </div>
+
+      <h2>Environment Variables</h2>
+      <p>These can be used as alternatives to CLI flags:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Description</th><th>Equivalent Flag</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>PORT</code></td><td>Server port</td><td><code>--port</code></td></tr>
+            <tr><td><code>UPLINK_HOST</code></td><td>Bind address</td><td><code>--host</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>CLI flags take priority over environment variables.</p>
+
+      <h2>Next Steps</h2>
       <ul>
-        <li><code>.uplink.pid</code> — Server process ID</li>
-        <li><code>.uplink-watchdog.pid</code> — Watchdog process ID</li>
-        <li><code>.uplink-watchdog.json</code> — Watchdog state (uptime, restart count, backoff)</li>
+        <li><a href="configuration.html">Configuration</a> — Customize Uplink via the Settings panel and config file</li>
+        <li><a href="voice-chat.html">Voice Chat</a> — Set up speech-to-text and text-to-speech</li>
+        <li><a href="remote-access.html">Remote Access</a> — Access Uplink from other devices</li>
       </ul>
-      <p>These are cleaned up automatically when you run <code>uplink-chat stop</code>. If the server crashes without cleanup, stale PID files are detected and ignored on the next start.</p>
 
       <div class="docs-footer">
         <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
