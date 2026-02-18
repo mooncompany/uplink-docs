@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Management — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+        <a href="cli.html">CLI Reference</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="agents.html" class="active">Agents</a>
+        <a href="artifacts.html">Artifacts</a>
+        <a href="split-view.html">Split View</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Reference</div>
+        <a href="commands.html">Commands</a>
+        <a href="premium.html">Premium</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Agent Management</h1>
+      <p class="subtitle">Manage your AI agents right from Uplink — create new agents, customize their identity, control what tools they can use, and configure message routing. No config files needed.</p>
+
+      <h2>Opening the Agent Panel</h2>
+      <ol>
+        <li>Click the <strong>Settings</strong> button (⚙️) in the header.</li>
+        <li>Scroll to the <strong>Agents</strong> section and tap it to expand.</li>
+        <li>You'll see a list of all your configured agents.</li>
+      </ol>
+      <p>Each agent in the list shows:</p>
+      <ul>
+        <li><strong>Avatar and name</strong> — The agent's profile picture (or emoji fallback) and display name</li>
+        <li><strong>Model</strong> — Which AI model the agent uses</li>
+        <li><strong>Tool summary</strong> — How many tools are allowed or denied</li>
+        <li><strong>Route count</strong> — How many message routes point to this agent</li>
+        <li><strong>Badges</strong> — "default" if it's your default agent, "sandboxed" if sandboxing is enabled</li>
+      </ul>
+
+      <h2>Creating a New Agent</h2>
+      <ol>
+        <li>Open the agent panel (see above).</li>
+        <li>Click <strong>+ New Agent</strong> at the bottom of the list.</li>
+        <li>Fill in the required fields:
+          <ul>
+            <li><strong>Agent ID</strong> — A permanent, lowercase identifier (letters, numbers, and hyphens only). Example: <code>research-bot</code>. This can't be changed later.</li>
+            <li><strong>Display Name</strong> — A friendly name shown in the UI. Example: "Research Bot".</li>
+            <li><strong>Emoji</strong> — An emoji that represents this agent (used as a fallback when there's no avatar).</li>
+          </ul>
+        </li>
+        <li>Optionally choose a <strong>Primary Model</strong> from the dropdown, or leave it as "Inherit from defaults" to use whatever model your gateway is configured with.</li>
+        <li>Optionally set a <strong>Workspace Path</strong> — leave it empty to auto-generate one.</li>
+        <li>Click <strong>Create Agent &amp; Restart Gateway</strong>.</li>
+      </ol>
+
+      <div class="callout warning">
+        <strong>⚠ Gateway Restart Required</strong>
+        Creating an agent requires a brief gateway restart. Active chat sessions will reconnect automatically within a few seconds.
+      </div>
+
+      <h2>Viewing and Editing an Agent</h2>
+      <p>Click any agent in the list to open its detail view. You'll see a hero banner at the top with the agent's avatar (or emoji), name, and ID.</p>
+      <p>The detail view is organized into collapsible sections. Each section has an <strong>Edit</strong> button — click it to make changes, then <strong>Save</strong> to apply or <strong>Cancel</strong> to discard.</p>
+
+      <h3>Identity</h3>
+      <p>Controls how the agent appears in the UI.</p>
+      <ul>
+        <li><strong>Display Name</strong> — The name shown in chat bubbles, the satellite panel, and the agent list.</li>
+        <li><strong>Emoji</strong> — A fallback icon used when there's no avatar image.</li>
+        <li><strong>Persona Theme</strong> — A short description that gets injected into the agent's system prompt. For example: "helpful research assistant" or "sarcastic space lobster". This shapes the agent's personality.</li>
+      </ul>
+
+      <h3>Model</h3>
+      <p>Which AI model powers this agent.</p>
+      <ul>
+        <li><strong>Primary Model</strong> — Choose from available models, or select "Inherit from defaults" to use the gateway's default model.</li>
+        <li><strong>Fallbacks</strong> — A comma-separated list of backup models. If the primary is unavailable, the gateway tries these in order.</li>
+      </ul>
+
+      <h3>Workspace</h3>
+      <p>The file path where this agent stores its working files. This is read-only in the detail view — it's set when the agent is created.</p>
+
+      <h3>Sandbox</h3>
+      <p>Controls whether the agent runs in an isolated sandbox environment.</p>
+      <ul>
+        <li><strong>Mode</strong> — Off (no sandbox), Non-main sessions (only sandbox satellite sessions), or All (always sandboxed).</li>
+        <li><strong>Scope</strong> — Per session (fresh sandbox each session), Per agent (shared across sessions), or Shared (shared with other agents).</li>
+        <li><strong>Workspace Access</strong> — Read/Write, Read Only, or None.</li>
+      </ul>
+
+      <h3>Tools</h3>
+      <p>Control which tools the agent can use. See the <a href="#tool-presets">Tool Presets</a> and <a href="#tool-groups">Tool Groups</a> sections below for details.</p>
+
+      <h3>Sub-agents</h3>
+      <p>Configure whether this agent can spawn sub-agents (smaller helper agents for specific tasks).</p>
+      <ul>
+        <li><strong>Allowed Models</strong> — List of models the sub-agents can use (one per line).</li>
+        <li><strong>Max Concurrent</strong> — Maximum number of sub-agents that can run at the same time.</li>
+      </ul>
+
+      <h3>Routing</h3>
+      <p>Routes determine which incoming messages get sent to this agent. See <a href="#routing-configuration">Routing Configuration</a> below.</p>
+
+      <h3>Raw Config</h3>
+      <p>At the bottom of the detail view, there's a collapsible <strong>Raw Config</strong> section. Click it to see the agent's full JSON configuration. You can copy it to your clipboard with the <strong>Copy JSON</strong> button — useful for backups or debugging.</p>
+
+      <h2>Hero Banner and Avatar</h2>
+      <p>Each agent has a hero banner at the top of its detail page — a large, full-width image that gives the agent visual identity.</p>
+
+      <h3>Uploading an Avatar</h3>
+      <ol>
+        <li>Open the agent's detail view.</li>
+        <li>Hover over the hero banner area — you'll see a camera icon (📷) appear.</li>
+        <li>Click anywhere on the hero banner.</li>
+        <li>Select an image file (PNG, JPEG, or WebP).</li>
+        <li>The image uploads immediately and becomes the agent's avatar.</li>
+      </ol>
+      <p>The avatar is displayed as a full-width banner on the detail page, and as a small circular image in the agent list, chat bubbles, the satellite panel, and split view headers.</p>
+      <p><strong>Supported formats:</strong> PNG, JPEG, WebP<br>
+      <strong>Maximum resolution:</strong> 512×512 pixels (images are automatically resized while preserving aspect ratio)</p>
+
+      <h3>Removing an Avatar</h3>
+      <ol>
+        <li>Open the agent's detail view.</li>
+        <li>Click the <strong>✕</strong> button in the top-right corner of the hero banner.</li>
+        <li>The avatar is removed and the agent falls back to its emoji.</li>
+      </ol>
+
+      <h2 id="tool-presets">Tool Presets</h2>
+      <p>When editing the <strong>Tools</strong> section, you'll see a row of preset buttons at the top. These are quick-apply configurations that set up common tool access patterns with one click:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Preset</th><th>What It Does</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Full Access</strong></td><td>No restrictions — the agent can use every available tool.</td></tr>
+            <tr><td><strong>Read Only</strong></td><td>The agent can only read files, search the web, view images, and check session status. It can't write files, run commands, or send messages.</td></tr>
+            <tr><td><strong>Safe Execution</strong></td><td>The agent can run commands, read/write files, manage sessions, and search the web — but can't send messages to other channels or control nodes.</td></tr>
+            <tr><td><strong>Communication</strong></td><td>The agent can manage sessions, send messages, control nodes, and use text-to-speech — but can't run shell commands or modify files.</td></tr>
+            <tr><td><strong>No Exec</strong></td><td>The agent can do everything <em>except</em> run shell commands (exec, bash, process). Good for agents that should read and write but not execute arbitrary code.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Click any preset to instantly configure the tool permissions. You can then fine-tune individual tools before saving.</p>
+
+      <h2 id="tool-groups">Tool Groups</h2>
+      <p>Below the presets, you'll see the tool mode selector and a grid of tool groups. First, choose a mode:</p>
+      <ul>
+        <li><strong>Full access</strong> — No restrictions. The tool grid is hidden because everything is allowed.</li>
+        <li><strong>Allowlist</strong> — Only the tools you check will be available to the agent.</li>
+        <li><strong>Denylist</strong> — The tools you check will be <em>blocked</em>. Everything else is allowed.</li>
+      </ul>
+      <p>The tool grid organizes all available tools into logical groups:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Group</th><th>Tools</th><th>What They Do</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Runtime</strong></td><td>exec, bash, process</td><td>Run shell commands and manage processes</td></tr>
+            <tr><td><strong>File System</strong></td><td>read, write, edit, apply_patch</td><td>Read and modify files</td></tr>
+            <tr><td><strong>Sessions</strong></td><td>sessions_list, sessions_history, sessions_send, sessions_spawn, session_status</td><td>Manage chat sessions</td></tr>
+            <tr><td><strong>Memory</strong></td><td>memory_search, memory_get</td><td>Access stored memories</td></tr>
+            <tr><td><strong>UI</strong></td><td>browser, canvas</td><td>Control web browsers and display canvases</td></tr>
+            <tr><td><strong>Automation</strong></td><td>cron, gateway</td><td>Schedule tasks and manage the gateway</td></tr>
+            <tr><td><strong>Messaging</strong></td><td>message</td><td>Send messages to channels</td></tr>
+            <tr><td><strong>Nodes</strong></td><td>nodes</td><td>Control paired devices</td></tr>
+            <tr><td><strong>Web</strong></td><td>web_search, web_fetch</td><td>Search the internet and fetch web pages</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Checking a group checkbox</strong> selects all tools in that group at once. You can also check individual tools within a group for finer control.</p>
+
+      <h3>Step-by-step: Setting Up Tool Permissions</h3>
+      <ol>
+        <li>Open the agent's detail view and click <strong>Edit</strong> on the <strong>Tools</strong> section.</li>
+        <li><strong>(Optional)</strong> Click a preset button to start with a common configuration.</li>
+        <li>Choose a mode: Allowlist or Denylist.</li>
+        <li>Check the groups or individual tools you want to allow (or deny).</li>
+        <li>Click <strong>Save</strong>.</li>
+      </ol>
+
+      <h2 id="routing-configuration">Routing Configuration</h2>
+      <p>Routes tell the gateway which messages should go to which agent. This is how you can have different agents handle different channels (Discord, WhatsApp, Telegram, etc.) or different conversations.</p>
+
+      <h3>How Routing Works</h3>
+      <ul>
+        <li>Each route has a <strong>match</strong> — a set of conditions like channel, account, and peer.</li>
+        <li>When a message comes in, the gateway finds the most specific matching route and sends the message to that agent.</li>
+        <li>If no route matches, the message goes to the <strong>default agent</strong> (marked with a "default" badge).</li>
+      </ul>
+
+      <h3>Adding a Route</h3>
+      <ol>
+        <li>Open the agent's detail view.</li>
+        <li>Click <strong>Edit</strong> on the <strong>Routing</strong> section.</li>
+        <li>Click <strong>+ Add Route</strong>.</li>
+        <li>Fill in the match conditions:
+          <ul>
+            <li><strong>Channel</strong> — Which platform (e.g., discord, whatsapp, telegram), or "Any channel" for all.</li>
+            <li><strong>Account ID</strong> — A specific account identifier, or leave as <code>*</code> for any account.</li>
+            <li><strong>Peer Type</strong> — None, Direct (DM), Group, or Channel.</li>
+            <li><strong>Peer ID</strong> — The specific chat/group/channel ID (enabled when you select a peer type).</li>
+            <li><strong>Guild ID</strong> — (Discord only) A specific Discord server ID.</li>
+            <li><strong>Team ID</strong> — (Slack only) A specific Slack workspace ID.</li>
+          </ul>
+        </li>
+        <li>Click <strong>Save</strong> to apply.</li>
+      </ol>
+
+      <h3>Removing a Route</h3>
+      <ol>
+        <li>Click <strong>Edit</strong> on the Routing section.</li>
+        <li>Click the <strong>✕</strong> button next to the route you want to remove.</li>
+        <li>Click <strong>Save</strong>.</li>
+      </ol>
+
+      <h3>Example: Route Discord DMs to a Specific Agent</h3>
+      <ol>
+        <li>Open the agent you want to handle Discord DMs.</li>
+        <li>Edit the Routing section.</li>
+        <li>Add a route with:
+          <ul>
+            <li>Channel: <code>discord</code></li>
+            <li>Peer Type: <code>Direct (DM)</code></li>
+            <li>Peer ID: (leave empty to match all DMs, or enter a specific user ID)</li>
+          </ul>
+        </li>
+        <li>Save.</li>
+      </ol>
+
+      <h2>Deleting an Agent</h2>
+      <ol>
+        <li>Open the agent's detail view.</li>
+        <li>Scroll to the bottom and click <strong>Delete Agent</strong>.</li>
+        <li>Confirm in the dialog that appears.</li>
+      </ol>
+
+      <div class="callout warning">
+        <strong>⚠ Gateway Restart Required</strong>
+        Deleting an agent requires a gateway restart. Any routes pointing to this agent will also be removed.
+      </div>
+
+      <p><strong>Note:</strong> You can't delete the main agent or the last remaining agent.</p>
+
+      <h2>Tips</h2>
+      <ul>
+        <li><strong>Changes are saved per-section.</strong> You can edit and save Identity without affecting Tools, and vice versa.</li>
+        <li><strong>The gateway auto-restarts</strong> when creating or deleting agents. Edits to existing agents (like changing tools or identity) apply immediately without a restart.</li>
+        <li><strong>Concurrent edit protection</strong> — If someone else edits the config while you're making changes, Uplink will detect the conflict and refresh automatically.</li>
+        <li><strong>Avatar caching</strong> — After uploading a new avatar, it appears immediately. The browser caches it for fast loading on future visits.</li>
+      </ul>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+        <a href="cli.html">CLI Reference</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="agents.html">Agents</a>
+        <a href="artifacts.html">Artifacts</a>
+        <a href="split-view.html">Split View</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Reference</div>
+        <a href="commands.html">Commands</a>
+        <a href="premium.html">Premium</a>
+        <a href="faq.html" class="active">FAQ</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Frequently Asked Questions</h1>
+      <p class="subtitle">Quick answers to the most common questions about Uplink.</p>
+
+      <h2>General</h2>
+
+      <h3>What is Uplink?</h3>
+      <p>Uplink is a chat interface for AI assistants. It connects to an <a href="https://openclaw.ai" target="_blank">OpenClaw</a> gateway running on your machine, giving you a clean, fast way to chat with Claude, GPT, or other AI models — with voice chat, themes, encryption, and more.</p>
+
+      <h3>What is OpenClaw?</h3>
+      <p>OpenClaw is the AI gateway that powers Uplink. It handles:</p>
+      <ul>
+        <li>API connections to AI providers (Anthropic, OpenAI, etc.)</li>
+        <li>Conversation memory and context</li>
+        <li>Tools and automation (file access, web search, code execution, etc.)</li>
+        <li>Multi-session management</li>
+        <li>Agent personalities and routing</li>
+      </ul>
+      <p><strong>Uplink is the face. OpenClaw is the brain.</strong> Uplink provides the interface; OpenClaw does the thinking.</p>
+
+      <h3>Is Uplink free?</h3>
+      <p>Yes. Uplink's core features are free — text chat, satellites, file uploads, encryption, multi-device access, and more.</p>
+      <p><a href="premium.html">Uplink Premium</a> ($5 one-time) unlocks voice chat, all themes, agent management, split view, and early access to new features.</p>
+      <p>You'll also need an API key from an AI provider (Anthropic, OpenAI, etc.), which has its own costs.</p>
+
+      <h3>Does Uplink work offline?</h3>
+      <p>Partially:</p>
+      <ul>
+        <li><strong>The interface</strong> works offline — Uplink is a Progressive Web App that caches locally</li>
+        <li><strong>Conversation history</strong> is stored locally and accessible offline</li>
+        <li><strong>AI responses</strong> require internet (API calls to Claude, GPT, etc.)</li>
+        <li><strong>Local TTS/STT</strong> (Piper, XTTS, faster-whisper) works fully offline</li>
+        <li><strong>Cloud TTS/STT</strong> (ElevenLabs, OpenAI, Edge TTS) requires internet</li>
+      </ul>
+
+      <h3>Is my data private?</h3>
+      <p>Yes. Everything runs locally on your machine:</p>
+      <ul>
+        <li><strong>No Uplink servers</strong> — your data never touches our servers</li>
+        <li><strong>No accounts</strong> — there's no sign-up, no login, no user tracking</li>
+        <li><strong>No cloud storage</strong> — conversations are stored on your machine only</li>
+        <li><strong>No telemetry</strong> — Uplink doesn't phone home or collect analytics</li>
+        <li><strong>AI provider only</strong> — the only external data flow is your messages going to your AI provider (Anthropic, OpenAI, etc.) for responses, and that's a direct connection from your machine</li>
+      </ul>
+      <p>If you enable encryption (Settings → Privacy), your conversations are AES-256 encrypted at rest — even someone with access to your files can't read them without your password.</p>
+
+      <h2>Setup</h2>
+
+      <h3>Do I need OpenClaw installed first?</h3>
+      <p>Yes. Uplink is a frontend — it needs the OpenClaw gateway running to connect to AI models. Install OpenClaw first, then Uplink.</p>
+
+      <h3>What's the Gateway URL and Token?</h3>
+      <ul>
+        <li><strong>Gateway URL:</strong> Where OpenClaw is running (default: <code>http://localhost:23248</code>)</li>
+        <li><strong>Gateway Token:</strong> The authentication key from OpenClaw. Get it with:</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>openclaw gateway token</code></pre>
+      </div>
+
+      <p>Enter both in Uplink's <strong>Settings → Connection</strong>.</p>
+
+      <h3>Can I run Uplink without installing?</h3>
+      <p>Yes, run from source:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>git clone https://github.com/mooncompany/uplink.git
+cd uplink && npm install && npm start</code></pre>
+      </div>
+
+      <p>Then open <code>http://localhost:3456</code> in your browser.</p>
+
+      <h3>Does Uplink work on mobile?</h3>
+      <p>Yes! Uplink works great on phones and tablets:</p>
+      <ol>
+        <li>Set up <a href="remote-access.html">remote access</a> (Tailscale recommended for HTTPS)</li>
+        <li>Open the Tailscale HTTPS URL on your phone's browser</li>
+        <li><strong>Install as a PWA</strong> — "Add to Home Screen" for an app-like experience</li>
+      </ol>
+      <p>For voice chat on mobile, you <strong>must</strong> use HTTPS (which Tailscale provides automatically).</p>
+
+      <h2>Features</h2>
+
+      <h3>What are Satellites?</h3>
+      <p>Satellites are independent AI conversations, each with their own isolated context. Messages in one satellite don't affect another. Use them for:</p>
+      <ul>
+        <li>Keeping work and personal topics separate</li>
+        <li>Testing different prompts without affecting your main conversation</li>
+        <li>Having multiple parallel research threads</li>
+        <li>Starting fresh without losing your other chats</li>
+      </ul>
+      <p>All satellites share the same OpenClaw gateway — they're separate sessions, not separate AI providers.</p>
+
+      <h3>What are Artifacts?</h3>
+      <p>Artifacts are rich content blocks that the AI can create during a conversation — things like code files, documents, HTML pages, or visualizations. Instead of appearing inline in the chat, artifacts open in their own panel where you can view, copy, or interact with them.</p>
+      <p>Think of them as the AI's "work products" that deserve more than just a chat bubble.</p>
+
+      <h3>What is Split View?</h3>
+      <p>Split view lets you open two conversations side by side. Useful for:</p>
+      <ul>
+        <li>Comparing AI responses between two satellites</li>
+        <li>Referencing one conversation while working in another</li>
+        <li>Keeping a reference chat open while chatting about something else</li>
+      </ul>
+      <p>Split view is a <a href="premium.html">Premium</a> feature.</p>
+
+      <h3>Can I use voice input?</h3>
+      <p>Yes — Uplink supports three voice modes:</p>
+      <ul>
+        <li><strong>Push-to-talk</strong> — Hold the mic button to record, release to send</li>
+        <li><strong>Live Voice</strong> — Real-time voice-to-voice conversation (OpenAI Realtime API)</li>
+        <li><strong>Agent Voice</strong> — Voice bridge to your OpenClaw agent with full tool access</li>
+      </ul>
+      <p>Voice chat is a <a href="premium.html">Premium</a> feature. See the full <a href="voice-chat.html">Voice Chat</a> guide for details.</p>
+
+      <h3>Can the AI speak responses?</h3>
+      <p>Yes, with text-to-speech. Uplink supports five TTS engines:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Engine</th><th>Cost</th><th>Where it runs</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>ElevenLabs</strong></td><td>Paid</td><td>Cloud — highest quality</td></tr>
+            <tr><td><strong>OpenAI TTS</strong></td><td>Paid</td><td>Cloud — very natural</td></tr>
+            <tr><td><strong>Edge TTS</strong></td><td>Free</td><td>Cloud — great for free</td></tr>
+            <tr><td><strong>Piper</strong></td><td>Free</td><td>Local CPU — fast and offline</td></tr>
+            <tr><td><strong>XTTS</strong></td><td>Free</td><td>Local GPU — best local quality</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Configure your preferred engine in <strong>Settings → Voice &amp; TTS</strong>.</p>
+
+      <h3>Can I send images and files?</h3>
+      <p>Yes:</p>
+      <ul>
+        <li><strong>Drag and drop</strong> files onto the chat</li>
+        <li>Click the <strong>attachment button</strong> in the chat input</li>
+        <li><strong>Paste from clipboard</strong> (Ctrl/Cmd + V)</li>
+        <li>Supported: images, PDFs, DOCX, Excel spreadsheets</li>
+      </ul>
+
+      <h3>Does Uplink support tools?</h3>
+      <p>Yes, through OpenClaw. Your AI agent can use tools like file access, web search, code execution, and more — Uplink displays the results and tool activity in the Activity Panel (🔧 icon).</p>
+
+      <h3>Can I export conversations?</h3>
+      <p>Yes. Use the <code>/export</code> command to export conversations as Markdown or JSON.</p>
+
+      <h3>How many themes are there?</h3>
+      <p>Five built-in themes:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Theme</th><th>Style</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Midnight</strong></td><td>Dark with cyan accents (the default, free)</td></tr>
+            <tr><td><strong>Daylight</strong></td><td>Light and warm</td></tr>
+            <tr><td><strong>Ember</strong></td><td>Deep fire tones on dark navy</td></tr>
+            <tr><td><strong>Forest</strong></td><td>Earthy greens</td></tr>
+            <tr><td><strong>Phantom</strong></td><td>Monochrome grayscale</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Premium users get access to all five plus the custom theme generator. Free users get Midnight.</p>
+
+      <h2>Voice Chat</h2>
+
+      <h3>What do I need for voice chat?</h3>
+      <p>At minimum:</p>
+      <ul>
+        <li><strong>Uplink Premium</strong> (voice is a Premium feature)</li>
+        <li>A <strong>microphone</strong> (built-in or external)</li>
+        <li><strong>HTTPS or localhost</strong> access (browsers require this for mic access)</li>
+      </ul>
+      <p>For specific voice modes, you may also need:</p>
+      <ul>
+        <li><strong>Push-to-talk:</strong> Any STT provider + any TTS provider</li>
+        <li><strong>Live Voice:</strong> An OpenAI API key</li>
+        <li><strong>Agent Voice:</strong> An OpenAI API key + a running OpenClaw gateway</li>
+      </ul>
+
+      <h3>Which voice mode should I use?</h3>
+      <ul>
+        <li><strong>Push-to-talk</strong> if you want simple dictation with full control over when you're recording</li>
+        <li><strong>Live Voice</strong> if you want a quick, direct voice conversation with OpenAI's voice model</li>
+        <li><strong>Agent Voice</strong> if you want voice conversations with your full OpenClaw agent (tools, memory, personality, and the ability to interrupt)</li>
+      </ul>
+
+      <h3>Can I interrupt the AI while it's talking?</h3>
+      <p>Yes — in <strong>Agent Voice mode</strong>, just start speaking. Uplink detects your voice, stops the AI mid-sentence, and starts listening to you. The partial response is saved to chat history.</p>
+
+      <h3>Why can't I use the microphone on my phone?</h3>
+      <p>Browsers require HTTPS for microphone access. If you're accessing Uplink over plain HTTP (like <code>http://192.168.1.100:3456</code>), the mic won't work. Use <a href="remote-access.html">Tailscale</a> for automatic HTTPS, or access via <code>localhost</code>.</p>
+
+      <h3>What's the best free voice setup?</h3>
+      <ul>
+        <li><strong>STT:</strong> Groq Whisper — free tier, fast, accurate</li>
+        <li><strong>TTS:</strong> Edge TTS — free, no API key, sounds natural</li>
+        <li><strong>Mode:</strong> Push-to-talk (simplest to set up)</li>
+      </ul>
+
+      <h2>Privacy &amp; Security</h2>
+
+      <h3>Where is my data stored?</h3>
+      <p>Everything is stored locally on the machine running Uplink:</p>
+      <ul>
+        <li><strong>Conversations:</strong> In Uplink's data directory</li>
+        <li><strong>Settings:</strong> In <code>config.json</code> alongside Uplink</li>
+        <li><strong>Encryption keys:</strong> In your browser only (never sent to the server)</li>
+      </ul>
+
+      <h3>What data is sent externally?</h3>
+      <p>Only your messages to the AI provider (Anthropic, OpenAI, etc.) for generating responses. <strong>Nothing</strong> is sent to Uplink, Moon Company, or any third party. The only external connections are:</p>
+      <ul>
+        <li>Your AI provider's API (for chat responses)</li>
+        <li>Your TTS provider (if using a cloud engine)</li>
+        <li>Your STT provider (if using a cloud engine)</li>
+      </ul>
+      <p>All of these are your own API keys connecting to services you chose.</p>
+
+      <h3>Is encryption recommended?</h3>
+      <p>If you discuss sensitive topics or share your computer with others, yes. Enable it in <strong>Settings → Privacy → Encrypt History</strong>. It uses AES-256 encryption — your password never leaves your browser, and conversations are encrypted before reaching the server.</p>
+
+      <div class="callout warning">
+        <strong>⚠ Unrecoverable</strong>
+        If you forget your encryption password, conversations are unrecoverable. That's by design — zero-knowledge means not even Uplink can read your data.
+      </div>
+
+      <h3>Can others access my Uplink?</h3>
+      <p>Only if:</p>
+      <ul>
+        <li>They're on the same network and you've enabled network access (Settings → Server)</li>
+        <li>You've shared your Tailscale network with them</li>
+        <li>They have physical access to your machine</li>
+      </ul>
+      <p>For remote access, enable <strong>authentication</strong> (Settings → Connection → Auth Token) so connections require a password.</p>
+
+      <h2>Premium</h2>
+
+      <h3>How much does Premium cost?</h3>
+      <p>$5 — one-time purchase. No subscription, no renewal, no recurring fees.</p>
+
+      <h3>What's included in Premium?</h3>
+      <p>Voice chat, all themes + custom generator, agent management, split view, and early access to new features. See the full <a href="premium.html">Premium</a> page for details.</p>
+
+      <h3>What does "Coming Soon" mean?</h3>
+      <p>It means the Premium features exist in the app, but the purchase flow isn't live yet. If you have a license key (from beta testing or a promo), you can activate it now.</p>
+
+      <h3>How do I activate my license key?</h3>
+      <p>Go to <strong>Settings → Premium → Enter Key</strong>, paste your key (<code>UPL-XXXXX-XXXXX-XXXXX-XXXXX</code>), and click Activate.</p>
+
+      <h3>How many devices can I use?</h3>
+      <p>Up to 3 devices per license key. Deactivate on one device to free up a slot for another.</p>
+
+      <h2>Troubleshooting</h2>
+
+      <h3>"Disconnected" or "No response received"</h3>
+      <ol>
+        <li><strong>Is OpenClaw running?</strong> → <code>openclaw gateway status</code> (or <code>openclaw gateway start</code> to start it)</li>
+        <li><strong>Correct Gateway URL?</strong> → Check Settings → Connection. Should be <code>http://127.0.0.1:23248</code> (or your gateway's local address). <strong>Never</strong> point this at a Tailscale or LAN IP.</li>
+        <li><strong>Valid token?</strong> → Regenerate with <code>openclaw gateway token</code> and update in Settings</li>
+      </ol>
+
+      <h3>Responses are slow</h3>
+      <p>AI response time depends on:</p>
+      <ul>
+        <li>The model you're using (larger models = slower)</li>
+        <li>Your AI provider's current load</li>
+        <li>Query complexity</li>
+        <li>Whether TTS is enabled (adds 1–5 seconds for voice synthesis)</li>
+      </ul>
+      <p><strong>Tips:</strong> Use a faster model for simple questions. Disable TTS if you don't need voice. Try Groq for faster STT.</p>
+
+      <h3>Chat history seems missing</h3>
+      <p>Chat history is persisted on the server. If it seems gone:</p>
+      <ul>
+        <li>Make sure you're connected to the same Uplink server</li>
+        <li>Check that you're in the right satellite</li>
+        <li>If you cleared browser data, you may need to re-enter your encryption password (if encryption is enabled)</li>
+      </ul>
+
+      <h3>Voice issues</h3>
+      <p>See the <a href="voice-chat.html#troubleshooting">Voice Chat troubleshooting section</a> for detailed voice-specific help.</p>
+
+      <h2>Comparison</h2>
+
+      <h3>Uplink vs ChatGPT / Claude web interface</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Uplink</th><th>ChatGPT / Claude web</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Runs locally</strong></td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>Data privacy</strong></td><td>✅ Full control</td><td>❌ Stored on their servers</td></tr>
+            <tr><td><strong>Custom voice</strong></td><td>✅ 5 TTS engines</td><td>Limited</td></tr>
+            <tr><td><strong>Multiple models</strong></td><td>✅ Via OpenClaw</td><td>❌ Locked to provider</td></tr>
+            <tr><td><strong>Works offline (UI)</strong></td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>Tools &amp; automation</strong></td><td>✅ Via OpenClaw</td><td>Limited</td></tr>
+            <tr><td><strong>Open source</strong></td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>Cost</strong></td><td>Free + API keys</td><td>Subscription</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Why not just use Telegram / Discord / WhatsApp with OpenClaw?</h3>
+      <p>You can! OpenClaw supports all of those as channels. But Uplink offers things messaging apps can't:</p>
+      <ul>
+        <li><strong>Voice chat</strong> with multiple TTS/STT engines</li>
+        <li><strong>Custom themes</strong> and a polished, purpose-built UI</li>
+        <li><strong>Split view</strong> for side-by-side conversations</li>
+        <li><strong>Artifacts</strong> for rich content viewing</li>
+        <li><strong>Activity panel</strong> showing real-time tool calls and processing</li>
+        <li><strong>Encryption</strong> for private conversations</li>
+        <li><strong>PWA</strong> experience on mobile</li>
+      </ul>
+
+      <div class="callout">
+        <strong>ℹ Still have questions?</strong>
+        Check the <a href="troubleshooting.html">Troubleshooting</a> guide or ask in the OpenClaw community.
+      </div>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

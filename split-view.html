@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Split View — UPLINK Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="logo">⬡ UPLINK DOCS</a>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="features.html">Features</a>
+      <a href="configuration.html">Config</a>
+      <a href="https://github.com/mooncompany/uplink" target="_blank">GitHub</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <a href="getting-started.html">Installation</a>
+        <a href="configuration.html">Configuration</a>
+        <a href="cli.html">CLI Reference</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <a href="features.html">Overview</a>
+        <a href="voice-chat.html">Voice Chat</a>
+        <a href="agents.html">Agents</a>
+        <a href="artifacts.html">Artifacts</a>
+        <a href="split-view.html" class="active">Split View</a>
+        <a href="remote-access.html">Remote Access</a>
+        <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Reference</div>
+        <a href="commands.html">Commands</a>
+        <a href="premium.html">Premium</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Support</div>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Split View</h1>
+      <p class="subtitle">Split view lets you have two chat conversations side by side on your screen. Run a main chat on the left and a second session on the right — perfect for comparing agent responses, working with multiple agents at once, or keeping a reference conversation open while you work.</p>
+
+      <div class="callout">
+        <strong>ℹ Desktop Only</strong>
+        Split view requires a screen width of at least 1024px. On mobile and tablets, the split view button is hidden.
+      </div>
+
+      <h2>Opening Split View</h2>
+      <p>The split view button sits in the <strong>center of the header</strong>, between the Text mode and Voice mode buttons. It looks like a rectangle divided by a vertical line.</p>
+      <ol>
+        <li>Click the <strong>Split View</strong> button in the header.</li>
+        <li>The screen divides into two panes: your current chat stays on the left, and a new secondary pane appears on the right.</li>
+        <li>A <strong>session picker</strong> appears automatically in the right pane — choose which session to open.</li>
+      </ol>
+
+      <h3>Choosing a Session</h3>
+      <p>The session picker shows all your available sessions (satellites and primary sessions). Each entry displays:</p>
+      <ul>
+        <li>The agent's <strong>avatar</strong> (or emoji fallback)</li>
+        <li>The <strong>session name</strong></li>
+        <li>A <strong>"Primary"</strong> badge if it's the session currently active in the left pane</li>
+        <li>An <strong>"Active"</strong> badge if it's already loaded in the right pane</li>
+      </ul>
+      <p>Click any session to open it in the secondary pane. Its chat history loads immediately.</p>
+
+      <h2>How Sessions Work Per Pane</h2>
+      <p>Each pane operates independently:</p>
+      <ul>
+        <li><strong>Left pane (Primary):</strong> This is your normal chat. It keeps whatever session you had open before entering split view.</li>
+        <li><strong>Right pane (Secondary):</strong> This is a second, independent chat session. It has its own message history, its own input box, and its own connection to the gateway.</li>
+      </ul>
+      <p>Messages you send in one pane don't appear in the other. Each pane talks to the gateway separately, so the AI context for each conversation stays isolated.</p>
+
+      <h3>Sending Messages</h3>
+      <p>Each pane has its own input area at the bottom:</p>
+      <ul>
+        <li>Type your message in the text box.</li>
+        <li>Press <strong>Enter</strong> to send (or <strong>Shift+Enter</strong> for a new line).</li>
+        <li>You can also click the send button.</li>
+      </ul>
+      <p>While the agent is generating a response, the input is temporarily disabled in that pane. The other pane stays fully interactive.</p>
+
+      <h2>Switching Sessions in the Right Pane</h2>
+      <p>To change which session is loaded in the secondary (right) pane:</p>
+      <ol>
+        <li>Click the <strong>Switch session</strong> button in the secondary pane's header (the icon with two arrows).</li>
+        <li>The session picker appears with all available sessions.</li>
+        <li>Select a different session.</li>
+        <li>The pane clears and loads the new session's history.</li>
+      </ol>
+      <p>You can switch sessions as many times as you want without affecting the left pane.</p>
+
+      <h2>Avatars and Visual Indicators</h2>
+      <p>Split view has full visual parity with the main chat:</p>
+      <ul>
+        <li><strong>Agent avatars</strong> appear next to assistant messages in both panes — the same circular profile pictures you see in the main chat.</li>
+        <li><strong>The secondary pane header</strong> shows the active agent's avatar and name.</li>
+        <li><strong>Timestamps</strong> are displayed on all messages (both from history and new messages), matching the main chat's format.</li>
+        <li><strong>Streaming effects</strong> — When the agent is generating a response, you'll see the same rainbow border glow animation as in the main chat.</li>
+      </ul>
+      <p>If an agent doesn't have a custom avatar, the header and message bubbles fall back to the agent's emoji or a default 🤖 icon.</p>
+
+      <h2>Context Tracking</h2>
+      <p>Each pane tracks its own context window usage independently:</p>
+      <ul>
+        <li>A <strong>context bar</strong> appears in the secondary pane header next to the agent name.</li>
+        <li>It shows a color-coded progress bar:
+          <ul>
+            <li>🟢 <strong>Green</strong> — Plenty of context remaining</li>
+            <li>🟡 <strong>Yellow</strong> — Getting full (75%+)</li>
+            <li>🔴 <strong>Red</strong> — Nearly full (90%+)</li>
+          </ul>
+        </li>
+        <li>The token count animates smoothly when it updates.</li>
+        <li>Context refreshes automatically after each message exchange.</li>
+      </ul>
+      <p>This helps you keep an eye on how much of the agent's memory is being used in each conversation.</p>
+
+      <h2>Resizing Panes</h2>
+      <p>You can adjust how much space each pane gets:</p>
+      <ol>
+        <li>Hover over the <strong>vertical divider</strong> between the two panes — your cursor changes to a resize indicator.</li>
+        <li>Click and drag left or right to resize.</li>
+        <li>Release to set the new size.</li>
+      </ol>
+      <p>The divider snaps smoothly and remembers reasonable minimum widths so neither pane becomes too small to use.</p>
+
+      <h2>Closing Split View</h2>
+      <p>To go back to the normal single-chat layout:</p>
+      <ul>
+        <li>Click the <strong>✕ button</strong> in the top-right corner of the secondary pane header, <strong>or</strong></li>
+        <li>Click the <strong>Split View button</strong> in the header again to toggle it off.</li>
+      </ul>
+      <p>The secondary pane closes, and your main chat expands back to full width. Your primary session is unaffected.</p>
+
+      <h2>Working with Agents and Satellites</h2>
+      <p>Split view is especially useful when combined with Uplink's satellite system:</p>
+      <ul>
+        <li><strong>Compare agents:</strong> Open your main agent on the left and a specialist agent (like a researcher or code reviewer) on the right. Ask both the same question and compare responses.</li>
+        <li><strong>Parallel workflows:</strong> Run a coding session on the left while keeping a documentation session open on the right.</li>
+        <li><strong>Monitor activity:</strong> Keep your primary conversation going while watching a long-running task in a satellite session.</li>
+      </ul>
+      <p>The session picker in split view shows sessions from all your agents — not just the one active in the left pane. Each session's agent avatar is displayed so you can quickly tell them apart.</p>
+
+      <h2>Tips</h2>
+      <ul>
+        <li><strong>Split view is a mode</strong>, like Text and Voice. Only one mode is active at a time — switching to Voice mode will close split view, and vice versa.</li>
+        <li><strong>History loads automatically.</strong> When you open a session in the right pane, the most recent 50 messages from that conversation load immediately.</li>
+        <li><strong>Both panes stream.</strong> You can have both panes generating responses simultaneously — they don't block each other.</li>
+        <li><strong>The satellite panel works with split view.</strong> You can open the satellite panel on desktop and it slides in alongside the split layout, with agent avatars shown throughout.</li>
+      </ul>
+
+      <div class="docs-footer">
+        <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/docs.js"></script>
+</body>
+</html>

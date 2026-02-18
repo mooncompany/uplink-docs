@@ -34,8 +34,17 @@
         <div class="sidebar-title">Features</div>
         <a href="features.html">Overview</a>
         <a href="voice-chat.html" class="active">Voice Chat</a>
+        <a href="agents.html">Agents</a>
+        <a href="artifacts.html">Artifacts</a>
+        <a href="split-view.html">Split View</a>
         <a href="remote-access.html">Remote Access</a>
         <a href="themes.html">Themes</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Reference</div>
+        <a href="commands.html">Commands</a>
+        <a href="premium.html">Premium</a>
+        <a href="faq.html">FAQ</a>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-title">Support</div>
@@ -45,71 +54,131 @@
 
     <main class="docs-content">
       <h1>Voice Chat</h1>
-      <p class="subtitle">Talk to your AI naturally with speech-to-text and text-to-speech — choose from local or cloud engines.</p>
+      <p class="subtitle">Talk to your AI naturally — dictate messages, hear responses spoken aloud, or have a full hands-free conversation.</p>
 
       <div class="callout warning">
         <strong>⚠ HTTPS Required for Microphone</strong>
-        Browsers only allow microphone access on secure origins. Speech-to-text will not work over plain <code>http://</code> — you must access Uplink via <strong>HTTPS</strong> or <strong>localhost</strong>. If you're accessing Uplink from another device on your network (e.g. your phone), use a tool like <a href="remote-access.html">Tailscale</a> which provides HTTPS automatically, or set up your own TLS certificate. TTS (text-to-speech) playback works over HTTP — only the microphone requires HTTPS.
+        Browsers only allow microphone access on secure origins. Voice input will <strong>not</strong> work over plain <code>http://</code> — you need to access Uplink via <strong>HTTPS</strong> or <strong>localhost</strong>. If you're using Uplink from another device (like your phone), set up <a href="remote-access.html">Tailscale</a> for automatic HTTPS. Text-to-speech playback works over HTTP — only the microphone requires HTTPS.
       </div>
 
-      <h2>How It Works</h2>
-      <p>Uplink's voice mode has two independent pipelines:</p>
-      <ul>
-        <li><strong>Speech-to-Text (STT)</strong> — Your voice is transcribed to text, then sent to the AI as a regular message</li>
-        <li><strong>Text-to-Speech (TTS)</strong> — The AI's text response is converted to audio and played back</li>
-      </ul>
-      <p>Both are configured independently in Settings → Voice & TTS. You can use one without the other — for example, dictate messages but read responses, or type messages but hear responses spoken aloud.</p>
+      <h2>Voice Modes</h2>
+      <p>Uplink offers three voice modes, each suited for different situations. You choose your mode in <strong>Settings → Voice &amp; TTS → Voice Mode</strong>.</p>
 
-      <h2>TTS Engines</h2>
-      <p>Uplink supports five text-to-speech engines: Edge TTS, OpenAI TTS, XTTS, ElevenLabs, and Piper. You select which one to use in Settings → Voice & TTS, and provide the server URL or API key if needed.</p>
+      <h3>Push-to-Talk (Classic)</h3>
+      <p>The simplest mode. Hold the microphone button to record your message, release to send. Your speech is transcribed to text, sent to the AI, and the response is spoken back.</p>
+      <ul>
+        <li><strong>How it works:</strong> Hold to record → release → your speech is transcribed → AI responds → response is spoken aloud</li>
+        <li><strong>Double-tap</strong> to toggle hands-free recording (auto-stops after 2 seconds of silence)</li>
+        <li>Works with any STT + TTS provider combination</li>
+        <li>Great for quick messages or noisy environments</li>
+      </ul>
+
+      <h3>Live Voice (Standalone)</h3>
+      <p>A real-time voice conversation powered by OpenAI's Realtime API. No press-and-hold — just tap once to start talking, and the AI responds with natural voice immediately.</p>
+      <ul>
+        <li><strong>How it works:</strong> Tap to start → speak naturally → AI responds in real-time voice → tap to end</li>
+        <li>Direct voice-to-voice conversation with OpenAI</li>
+        <li>Ultra-low latency — feels like a phone call</li>
+        <li>Requires an OpenAI API key</li>
+        <li>The AI uses its own voice and personality</li>
+      </ul>
+
+      <h3>Agent Voice (The Big One)</h3>
+      <p>A full voice bridge to your OpenClaw agent. You speak, your words are transcribed, sent to your agent (with all its tools, memory, and personality), and the response is spoken back to you. It's like having a voice conversation with your personal AI assistant.</p>
+      <ul>
+        <li><strong>How it works:</strong> Tap to start → speak naturally → your speech is transcribed → sent to your OpenClaw agent → agent responds with text → text is spoken aloud → you can interrupt at any time</li>
+        <li>Your agent keeps its full personality, memory, and tool access</li>
+        <li>Voice transcripts are saved to chat history like regular messages</li>
+        <li>Supports interrupts — start talking to cut the agent off mid-sentence</li>
+        <li>Requires an OpenAI API key (for transcription) and a running OpenClaw gateway</li>
+      </ul>
+
+      <h2>How the Audio Pipeline Works</h2>
+      <p>Uplink uses a modern audio processing system called an <strong>AudioWorklet</strong> to capture your voice. Here's what that means for you:</p>
+      <ul>
+        <li><strong>No lag or stuttering</strong> — Audio processing happens on a dedicated thread, separate from the rest of the app. The interface stays smooth even during long conversations.</li>
+        <li><strong>Lower latency</strong> — Your voice reaches the AI faster because there's no waiting for the main app to process it.</li>
+        <li><strong>Automatic fallback</strong> — If your browser doesn't support AudioWorklet (rare, but possible on older browsers), Uplink automatically falls back to a compatible method. You don't need to do anything.</li>
+      </ul>
+      <p>In short: it just works, and it works well. You'll notice the difference especially in Agent Voice mode during long conversations.</p>
+
+      <h2>Voice Activity Detection (VAD)</h2>
+      <p>In <strong>Agent Voice mode</strong>, Uplink automatically detects when you start and stop speaking. You don't need to press any buttons — just talk naturally.</p>
+
+      <h3>How it works</h3>
+      <ul>
+        <li>Uplink continuously monitors your microphone for speech-like sounds</li>
+        <li>When it detects your voice (based on volume and frequency analysis), it starts capturing</li>
+        <li>When you stop talking for about 800 milliseconds, it recognizes the pause and sends your audio for transcription</li>
+        <li>Brief pauses (like thinking mid-sentence) won't trigger a premature send — VAD waits to be sure you're done</li>
+      </ul>
+
+      <h3>What makes it reliable</h3>
+      <ul>
+        <li><strong>Frequency-aware</strong> — It doesn't just listen for loud sounds. It specifically looks for human speech frequencies (85–3500 Hz), so background music or a fan won't trigger it.</li>
+        <li><strong>Confirmation thresholds</strong> — Speech must be detected for 150ms before it's confirmed as talking (prevents false starts from a cough or bump). Silence must last 800ms before it's confirmed as a pause (prevents cutting you off mid-thought).</li>
+        <li><strong>Works in real-time</strong> — Checks 20 times per second with zero impact on performance.</li>
+      </ul>
+
+      <h2>Interrupts</h2>
+      <p>In <strong>Agent Voice mode</strong>, you can interrupt the AI while it's speaking. Just start talking — Uplink will:</p>
+      <ol>
+        <li><strong>Stop the audio</strong> — The AI's voice stops immediately</li>
+        <li><strong>Save what was said</strong> — The partial response is kept in chat history (marked with a dash to show it was cut short)</li>
+        <li><strong>Cancel the rest</strong> — The server stops generating the remaining response</li>
+        <li><strong>Listen to you</strong> — Your microphone unmutes and Uplink starts listening for your next message</li>
+      </ol>
+      <p>This makes conversations feel natural. You don't have to wait for the AI to finish a long answer before asking a follow-up or changing direction.</p>
+
+      <h2>Text-to-Speech (TTS) Providers</h2>
+      <p>Uplink supports five TTS engines. You choose which one to use in <strong>Settings → Voice &amp; TTS</strong>. Each has different tradeoffs between quality, speed, cost, and privacy.</p>
 
       <h3>ElevenLabs (Cloud)</h3>
-      <p>ElevenLabs is the primary TTS provider in Uplink. Cloud-based with the highest quality voice synthesis available — natural, expressive, and highly realistic.</p>
+      <p>The highest quality voice synthesis available. Natural, expressive, and highly realistic.</p>
       <ul>
-        <li>Highest quality voice output among all supported engines</li>
-        <li>Requires an <a href="https://elevenlabs.io" target="_blank">ElevenLabs</a> API key</li>
-        <li>Voice selection available in Settings → Voice & TTS</li>
-        <li>Requires internet connection</li>
-        <li>Pay-per-character pricing (free tier available with limits)</li>
+        <li><strong>Quality:</strong> ★★★★★ — Best available</li>
+        <li><strong>Cost:</strong> Paid (free tier available with character limits) — <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a></li>
+        <li><strong>Setup:</strong> Enter your ElevenLabs API key in Settings → Voice &amp; TTS</li>
+        <li><strong>Voices:</strong> Large library including custom and cloned voices</li>
+        <li><strong>Requires:</strong> Internet connection</li>
       </ul>
 
       <h3>OpenAI TTS (Cloud)</h3>
-      <p>OpenAI's text-to-speech API. High quality, natural-sounding voices. Requires an OpenAI API key.</p>
+      <p>OpenAI's text-to-speech API. High quality with natural prosody and intonation.</p>
       <ul>
-        <li>10 voices: alloy, ash, ballad, coral, echo, fable, nova, onyx, sage, shimmer</li>
-        <li>Very natural prosody and intonation</li>
-        <li>Requires API key and has per-character pricing</li>
-        <li>Configure your API key in Settings → Voice & TTS</li>
+        <li><strong>Quality:</strong> ★★★★☆ — Very natural</li>
+        <li><strong>Cost:</strong> Paid (per character) — uses your OpenAI API key</li>
+        <li><strong>Setup:</strong> Your OpenAI API key is shared with the chat API — no extra configuration</li>
+        <li><strong>Voices:</strong> alloy, ash, ballad, coral, echo, fable, nova, onyx, sage, shimmer</li>
+        <li><strong>Models:</strong> <code>tts-1</code> (faster) or <code>tts-1-hd</code> (higher quality)</li>
+        <li><strong>Requires:</strong> Internet connection</li>
       </ul>
 
       <h3>Edge TTS (Free Cloud)</h3>
-      <p>Microsoft's Edge TTS API. Free, no API key required, excellent quality with many voice options. Requires installing the <code>node-edge-tts</code> package.</p>
-
-      <div class="code-block">
-        <div class="code-block-header">
-          <span>bash</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code># Install the Edge TTS dependency (required)
-npm install node-edge-tts</code></pre>
-      </div>
-
+      <p>Microsoft's Edge TTS API. Excellent quality with hundreds of voices across dozens of languages — and it's completely free.</p>
       <ul>
-        <li>Hundreds of voices across dozens of languages</li>
-        <li>No API key required — completely free</li>
-        <li>Requires internet connection</li>
-        <li>Slight latency due to cloud round-trip</li>
+        <li><strong>Quality:</strong> ★★★★☆ — Surprisingly good for free</li>
+        <li><strong>Cost:</strong> Free — no API key required</li>
+        <li><strong>Setup:</strong> Select "Edge TTS" as your engine and pick a voice. That's it.</li>
+        <li><strong>Voices:</strong> Hundreds of voices in 45+ languages</li>
+        <li><strong>Requires:</strong> Internet connection</li>
+        <li><strong>Note:</strong> In Agent Voice mode, Edge TTS is the default fallback if no OpenAI key is available</li>
       </ul>
 
       <h3>Piper (Local)</h3>
-      <p>A fast, local text-to-speech engine that runs entirely on your CPU — no GPU required. Great for offline or low-latency use cases with many available voice models.</p>
+      <p>A fast, lightweight TTS engine that runs entirely on your machine — no internet needed, no GPU needed.</p>
       <ul>
-        <li>Runs locally — no internet connection needed</li>
-        <li>Fast inference on CPU (no GPU required)</li>
-        <li>Many community voice models available in <code>.onnx</code> format</li>
-        <li>Requires the <code>PIPER_MODEL</code> environment variable pointing to the <code>.onnx</code> model file</li>
-        <li>Optional: <code>PIPER_EXECUTABLE</code> to specify a custom Piper binary path</li>
-        <li>Optional: <code>PIPER_CONFIG</code> to specify a custom config JSON file</li>
+        <li><strong>Quality:</strong> ★★★☆☆ — Good, with many community voice models</li>
+        <li><strong>Cost:</strong> Free — runs locally</li>
+        <li><strong>Setup:</strong>
+          <ol>
+            <li>Download a Piper voice model (<code>.onnx</code> file) from the <a href="https://github.com/rhasspy/piper" target="_blank">Piper voices repository</a></li>
+            <li>Set the <code>PIPER_MODEL</code> environment variable to point to your model file</li>
+            <li>Optionally set <code>PIPER_EXECUTABLE</code> and <code>PIPER_CONFIG</code> if needed</li>
+          </ol>
+        </li>
+        <li><strong>Voices:</strong> Many community models in various languages</li>
+        <li><strong>Requires:</strong> Nothing — runs on CPU</li>
       </ul>
 
       <div class="code-block">
@@ -117,114 +186,207 @@ npm install node-edge-tts</code></pre>
           <span>bash</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code># Set the required environment variable before starting Uplink
-export PIPER_MODEL=/path/to/voice-model.onnx
-
-# Optional: custom Piper binary and config
-export PIPER_EXECUTABLE=/path/to/piper
-export PIPER_CONFIG=/path/to/voice-model.onnx.json</code></pre>
+        <pre><code>PIPER_MODEL=/path/to/voice-model.onnx</code></pre>
       </div>
 
       <h3>Coqui XTTS (Local GPU)</h3>
-      <p>A high-quality local option — runs entirely on your machine. Requires an NVIDIA GPU with CUDA support and a running XTTS server.</p>
+      <p>A high-quality local TTS engine. Produces the most natural-sounding local voices, but requires an NVIDIA GPU.</p>
+      <ul>
+        <li><strong>Quality:</strong> ★★★★☆ — Best local quality</li>
+        <li><strong>Cost:</strong> Free — runs locally</li>
+        <li><strong>Setup:</strong>
+          <ol>
+            <li>Install and start the XTTS server (separate from Uplink)</li>
+            <li>Enter the server URL in Settings → Voice &amp; TTS → TTS Server URL (default: <code>http://localhost:8020</code>)</li>
+          </ol>
+        </li>
+        <li><strong>Requires:</strong> NVIDIA GPU with at least 4 GB VRAM. Runs on CPU but too slow for real-time conversation.</li>
+      </ul>
 
       <div class="code-block">
         <div class="code-block-header">
           <span>bash</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code># Install and run Coqui XTTS server (separate from Uplink)
-pip install TTS
-python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2
-
-# Enter the server URL in Uplink Settings → Voice & TTS → TTS Server URL</code></pre>
+        <pre><code>pip install TTS
+python -m TTS.server --model_name tts_models/multilingual/multi-dataset/xtts_v2</code></pre>
       </div>
 
-      <div class="callout">
-        <strong>ℹ GPU Required</strong>
-        XTTS needs an NVIDIA GPU with at least 4 GB VRAM. On CPU it will run but with unacceptable latency for real-time conversation.
-      </div>
-
-      <h2>STT Engines</h2>
-      <p>Uplink supports four speech-to-text providers: faster-whisper (local, free), Groq Whisper (cloud, free tier), OpenAI Whisper (cloud, paid), and Browser STT (free, built-in).</p>
-
-      <h3>OpenAI Whisper (Cloud)</h3>
-      <p>OpenAI's cloud-based speech-to-text API. Highly accurate transcription across many languages using the <code>whisper-1</code> model.</p>
-      <ul>
-        <li>Uses your existing OpenAI API key</li>
-        <li>Model: <code>whisper-1</code></li>
-        <li>Excellent accuracy across many languages</li>
-        <li>Requires internet connection</li>
-        <li>Pay-per-minute pricing</li>
-      </ul>
-
-      <h3>Groq Whisper (Cloud)</h3>
-      <p>Groq's cloud-based speech-to-text service. Extremely fast transcription powered by Groq's LPU hardware, with a generous free tier.</p>
-      <ul>
-        <li>Requires a <a href="https://console.groq.com" target="_blank">Groq</a> API key</li>
-        <li>Model: <code>whisper-large-v3-turbo</code></li>
-        <li>Very fast transcription — low latency</li>
-        <li>Free tier available</li>
-        <li>Requires internet connection</li>
-      </ul>
-
-      <h3>faster-whisper (Local)</h3>
-      <p>A highly optimized implementation of OpenAI's Whisper model. Runs locally on CPU or GPU with excellent accuracy.</p>
-
-      <div class="code-block">
-        <div class="code-block-header">
-          <span>bash</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code># Install and run faster-whisper server
-pip install faster-whisper
-# Use a wrapper server that exposes an HTTP API, e.g.:
-pip install whisper-asr-webservice
-python -m whisper_asr.webservice --model medium --device cuda
-
-# Enter the server URL in Uplink Settings → Voice & TTS → STT Server URL</code></pre>
-      </div>
-
-      <h3>Browser STT (Built-in)</h3>
-      <p>Built-in browser speech recognition using the Web Speech API. Free and requires no setup, but accuracy and language support varies by browser.</p>
-      <ul>
-        <li>No configuration needed — works out of the box</li>
-        <li>Free and built into modern browsers</li>
-        <li>Accuracy depends on browser and device</li>
-        <li>Requires internet connection (most browsers use cloud backend)</li>
-      </ul>
-
-      <h2>Voice Configuration Summary</h2>
-      <p>All voice settings are in Settings → Voice & TTS. Here's what each field does:</p>
-
+      <h3>Quick Comparison</h3>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Setting</th><th>Description</th><th>Default</th></tr>
+            <tr><th>Engine</th><th>Quality</th><th>Cost</th><th>Runs Where</th><th>Internet?</th><th>Setup</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>TTS Engine</strong></td><td>Which TTS backend to use</td><td>none (disabled)</td></tr>
-            <tr><td><strong>TTS Server URL</strong></td><td>URL for XTTS server (if using local)</td><td><em>localhost:8020</em></td></tr>
-            <tr><td><strong>TTS Voice</strong></td><td>Voice name/ID for the selected engine</td><td>Depends on engine</td></tr>
-            <tr><td><strong>STT Engine</strong></td><td>Which STT backend to use</td><td>none (disabled)</td></tr>
-            <tr><td><strong>STT Server URL</strong></td><td>URL for faster-whisper server</td><td><em>localhost:8000</em></td></tr>
+            <tr><td><strong>ElevenLabs</strong></td><td>★★★★★</td><td>Paid</td><td>Cloud</td><td>Yes</td><td>API key</td></tr>
+            <tr><td><strong>OpenAI TTS</strong></td><td>★★★★☆</td><td>Paid</td><td>Cloud</td><td>Yes</td><td>API key (shared)</td></tr>
+            <tr><td><strong>Edge TTS</strong></td><td>★★★★☆</td><td>Free</td><td>Cloud</td><td>Yes</td><td>None</td></tr>
+            <tr><td><strong>Piper</strong></td><td>★★★☆☆</td><td>Free</td><td>Your machine</td><td>No</td><td>Model download</td></tr>
+            <tr><td><strong>XTTS</strong></td><td>★★★★☆</td><td>Free</td><td>Your machine</td><td>No</td><td>GPU + server</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="callout warning">
-        <strong>⚠ User-Provided Servers</strong>
-        Uplink does not bundle or manage TTS/STT servers. You install and run them yourself, then point Uplink to the URLs. This is by design — it keeps Uplink lightweight and gives you full control over models and hardware.
+      <h2>Speech-to-Text (STT) Providers</h2>
+      <p>STT converts your spoken words into text. You choose your provider in <strong>Settings → Voice &amp; TTS</strong>.</p>
+
+      <h3>OpenAI Whisper (Cloud)</h3>
+      <p>OpenAI's cloud-based speech-to-text. Highly accurate across many languages.</p>
+      <ul>
+        <li><strong>Cost:</strong> Paid (~$0.006/minute) — uses your OpenAI API key</li>
+        <li><strong>Setup:</strong> Your OpenAI API key is shared with the chat API</li>
+        <li><strong>Model:</strong> <code>whisper-1</code></li>
+        <li><strong>Languages:</strong> 50+ languages with excellent accuracy</li>
+      </ul>
+
+      <h3>Groq Whisper (Cloud)</h3>
+      <p>Extremely fast transcription powered by Groq's specialized hardware. Has a generous free tier.</p>
+      <ul>
+        <li><strong>Cost:</strong> Free tier available (with rate limits)</li>
+        <li><strong>Setup:</strong> Get a free API key at <a href="https://console.groq.com" target="_blank">console.groq.com</a> and enter it in Settings</li>
+        <li><strong>Model:</strong> <code>whisper-large-v3-turbo</code> (faster) or <code>whisper-large-v3</code> (more accurate)</li>
+        <li><strong>Speed:</strong> Noticeably faster than other cloud options</li>
+      </ul>
+
+      <h3>faster-whisper (Local)</h3>
+      <p>Run Whisper entirely on your own machine. Excellent accuracy, works offline, completely private.</p>
+      <ul>
+        <li><strong>Cost:</strong> Free — runs locally</li>
+        <li><strong>Setup:</strong>
+          <ol>
+            <li>Install and start the server</li>
+            <li>Enter <code>http://localhost:8000</code> in Settings → Voice &amp; TTS → STT Server URL</li>
+          </ol>
+        </li>
+        <li><strong>Privacy:</strong> Audio never leaves your machine</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>bash</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Install and run
+pip install faster-whisper-server
+faster-whisper-server --host 0.0.0.0 --port 8000
+
+# Or via Docker
+docker run -d -p 8000:8000 fedirz/faster-whisper-server
+
+# For GPU acceleration
+docker run -d --gpus all -p 8000:8000 fedirz/faster-whisper-server</code></pre>
       </div>
 
-      <h2>Using Voice Mode</h2>
-      <p>Once configured, activate voice mode from the microphone button in the chat input area. Hold to talk (or tap to toggle, depending on your settings). Your speech is transcribed, sent as a message, and the response is spoken back to you.</p>
-      <p>Voice mode works on desktop browsers, mobile Safari, and mobile Chrome. For the best experience on mobile, install Uplink as a PWA.</p>
+      <h3>Browser STT (Built-in)</h3>
+      <p>Your browser's built-in speech recognition using the Web Speech API. Zero setup required.</p>
+      <ul>
+        <li><strong>Cost:</strong> Free</li>
+        <li><strong>Setup:</strong> None — works out of the box</li>
+        <li><strong>Accuracy:</strong> Varies by browser (Chrome is best, others may be limited)</li>
+        <li><strong>Note:</strong> Most browsers send audio to their own cloud service for processing, so this isn't truly local despite being "built-in"</li>
+      </ul>
 
-      <div class="callout">
-        <strong>ℹ Microphone on remote devices</strong>
-        If you're accessing Uplink from a phone or tablet over your local network, the microphone button won't work unless you're on a secure origin (HTTPS or localhost). See <a href="remote-access.html">Remote Access</a> for how to set this up with Tailscale.
-      </div>
+      <h2>Setting Up Each Voice Mode</h2>
+
+      <h3>Push-to-Talk Setup</h3>
+      <ol>
+        <li>Go to <strong>Settings → Voice &amp; TTS</strong></li>
+        <li>Set <strong>Voice Mode</strong> to "Push-to-talk"</li>
+        <li>Choose a <strong>TTS engine</strong> and configure it (API key, voice, etc.)</li>
+        <li>Choose an <strong>STT engine</strong> and configure it</li>
+        <li>Click the microphone button in the chat input to start recording</li>
+      </ol>
+
+      <h3>Live Voice Setup</h3>
+      <ol>
+        <li>Go to <strong>Settings → Voice &amp; TTS</strong></li>
+        <li>Set <strong>Voice Mode</strong> to "Live Voice"</li>
+        <li>Make sure you have an <strong>OpenAI API key</strong> configured (Settings → Connection)</li>
+        <li>Tap the microphone button to start a live voice session</li>
+        <li>Tap again to end it</li>
+      </ol>
+
+      <h3>Agent Voice Setup</h3>
+      <ol>
+        <li>Go to <strong>Settings → Voice &amp; TTS</strong></li>
+        <li>Set <strong>Voice Mode</strong> to "Agent Voice"</li>
+        <li>Make sure you have:
+          <ul>
+            <li>An <strong>OpenAI API key</strong> configured (for transcription)</li>
+            <li>A running <strong>OpenClaw gateway</strong> (for your agent)</li>
+          </ul>
+        </li>
+        <li>Optionally choose a TTS engine for the agent's voice (OpenAI TTS or Edge TTS)</li>
+        <li>Tap the microphone button to start — your agent's name appears in the status bar</li>
+        <li>Speak naturally. When you pause, your words are sent to the agent.</li>
+        <li>The agent responds with voice. You can interrupt at any time by speaking.</li>
+        <li>Tap the button again to end the session.</li>
+      </ol>
+
+      <h2>Pipelined TTS (Agent Voice)</h2>
+      <p>In Agent Voice mode, Uplink doesn't wait for the entire response before starting to speak. As soon as the first sentence of the agent's response is ready, it starts speaking — while the rest of the response is still being generated.</p>
+      <p>This means you hear the first words almost immediately, even for long responses. The experience feels conversational rather than "wait, then listen."</p>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+
+      <h3>Microphone not working</h3>
+      <ul>
+        <li><strong>Check HTTPS:</strong> You must be on <code>https://</code> or <code>localhost</code>. Plain <code>http://</code> blocks mic access.</li>
+        <li><strong>Check permissions:</strong> Your browser may have blocked mic access. Look for a camera/mic icon in the address bar.</li>
+        <li><strong>Try a different browser:</strong> Chrome and Edge have the best mic support.</li>
+        <li><strong>Remote access?</strong> Use <a href="remote-access.html">Tailscale</a> for automatic HTTPS on other devices.</li>
+      </ul>
+
+      <h3>No sound / TTS not playing</h3>
+      <ul>
+        <li><strong>Check your volume</strong> — sounds obvious, but it happens.</li>
+        <li><strong>Check the TTS engine</strong> is configured correctly in Settings → Voice &amp; TTS.</li>
+        <li><strong>Check the API key</strong> for cloud providers (ElevenLabs, OpenAI).</li>
+        <li><strong>Try Edge TTS</strong> — it's free and requires no API key. Good for testing.</li>
+      </ul>
+
+      <h3>Voice is choppy or laggy</h3>
+      <ul>
+        <li><strong>Network issues:</strong> Cloud TTS/STT depends on your internet connection. Try a local provider.</li>
+        <li><strong>Audio context blocked:</strong> Some browsers block audio playback until you interact with the page. Click somewhere first.</li>
+        <li><strong>Agent Voice lag:</strong> If the agent takes a while to respond, that's gateway processing time, not an audio issue. The pipelined TTS plays the first sentence as soon as it's available.</li>
+      </ul>
+
+      <h3>STT isn't transcribing correctly</h3>
+      <ul>
+        <li><strong>Background noise:</strong> Try a quieter environment or a closer microphone.</li>
+        <li><strong>Wrong language:</strong> Some STT providers default to English. Check your provider's language settings.</li>
+        <li><strong>Browser STT limitations:</strong> Built-in browser STT is less accurate than Whisper-based options. Try Groq (free) or OpenAI Whisper.</li>
+      </ul>
+
+      <h3>Agent Voice: "Real-time voice module not loaded"</h3>
+      <ul>
+        <li>Make sure you're running the latest version of Uplink.</li>
+        <li>Check the browser console for errors (F12 → Console).</li>
+        <li>Ensure your OpenAI API key is valid and has access to the Realtime API.</li>
+      </ul>
+
+      <h3>Agent Voice: Agent not responding</h3>
+      <ul>
+        <li>Verify your OpenClaw gateway is running (<code>openclaw gateway status</code>).</li>
+        <li>Check that the Gateway URL in Settings points to <code>http://127.0.0.1:23248</code> (or your gateway's local address).</li>
+        <li>Look at the Uplink server logs for error messages.</li>
+      </ul>
+
+      <h3>Echo or feedback in Agent Voice</h3>
+      <ul>
+        <li>This is handled automatically — Uplink mutes your microphone while the agent is speaking and unmutes it when the agent finishes. If you're still hearing echo, make sure you're not using external speakers near your microphone.</li>
+      </ul>
+
+      <h2>Tips</h2>
+      <ul>
+        <li><strong>Use headphones</strong> in Agent Voice mode to prevent the AI's voice from being picked up by your microphone.</li>
+        <li><strong>Edge TTS is a great starting point</strong> — it's free, requires no setup, and sounds surprisingly natural.</li>
+        <li><strong>Groq Whisper is the best free STT</strong> — fast, accurate, and has a generous free tier.</li>
+        <li><strong>You can mix and match</strong> — Use any STT provider with any TTS provider. They're independent.</li>
+        <li><strong>Voice transcripts appear in chat</strong> — Everything said in Agent Voice mode is saved to your conversation history, so you have a written record of voice conversations.</li>
+      </ul>
 
       <div class="docs-footer">
         <p>UPLINK Docs — Built by <a href="https://moonco.pro" target="_blank">Moon Company</a>. Open source under MIT.</p>
@@ -235,4 +397,3 @@ python -m whisper_asr.webservice --model medium --device cuda
   <script src="js/docs.js"></script>
 </body>
 </html>
-
