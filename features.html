@@ -183,6 +183,63 @@
         <li><strong>Agent settings</strong> — Configure agent-specific parameters and behavior</li>
       </ul>
 
+      <h2>Artifacts</h2>
+      <p>The Artifacts panel is a built-in document viewer for agent-generated files — PRDs, reports, code, notes, anything your agent creates. Browse, search, and read documents without leaving the chat.</p>
+
+      <h3>Where Artifacts Live</h3>
+      <p>Uplink checks these locations in order and uses the first one it finds:</p>
+      <ol>
+        <li><code>ARTIFACTS_DIR</code> environment variable (if set)</li>
+        <li><code>artifacts/</code> in the parent directory of your Uplink install (the OpenClaw workspace)</li>
+        <li><code>artifacts/</code> inside the Uplink directory itself</li>
+      </ol>
+
+      <h3>Setting It Up</h3>
+      <p>Create an <code>artifacts/</code> folder in your OpenClaw workspace and tell your agent to save documents there:</p>
+      <pre><code>workspace/
+├── AGENTS.md
+├── MEMORY.md
+├── artifacts/          ← agent writes docs here
+│   ├── project-prd.md
+│   ├── design-spec.md
+│   └── weekly-report.md
+└── uplink/</code></pre>
+
+      <p>Then add a rule to your <code>AGENTS.md</code>:</p>
+      <pre><code>## Artifacts
+- Save all generated documents to `artifacts/`
+- Use descriptive filenames (e.g., project-prd.md)
+- Supported: .md, .txt, .html, .json, .csv, .yml, .yaml, .xml, .log</code></pre>
+
+      <div class="callout">
+        <strong>💡 Custom location</strong>
+        Want artifacts stored somewhere else? Set the <code>ARTIFACTS_DIR</code> environment variable to any directory path.
+      </div>
+
+      <h2>Session Keys &amp; Multi-Platform Use</h2>
+      <p>Uplink uses <strong>session keys</strong> to track conversation history. Your primary satellite uses the key <code>agent:main:main</code> — the same key the OpenClaw Dashboard uses — so conversation history stays in sync between the two.</p>
+      <p>Other satellites get isolated keys like <code>agent:main:uplink:satellite:&lt;id&gt;</code>, and other messaging platforms (Telegram, Discord, Signal, etc.) use their own key formats.</p>
+
+      <div class="callout warning">
+        <strong>⚠ Cross-platform memory</strong>
+        This means <strong>conversation history is per-platform</strong>. If you chat with your agent on Telegram and then switch to Uplink, the agent won't remember what was said on Telegram — it's a separate session with separate history.
+      </div>
+
+      <h3>The Fix: Workspace Memory</h3>
+      <p>Instead of relying on conversation history (per-session), have your agent write important context to <strong>workspace files</strong>. Files like <code>MEMORY.md</code> are injected into every session automatically, regardless of platform.</p>
+
+      <p><strong>Quick approach:</strong></p>
+      <ol>
+        <li>Add a memory rule to your <code>AGENTS.md</code>: <em>"After completing any task, write a summary to <code>memory/YYYY-MM-DD.md</code>. Always check memory files before answering questions about project status."</em></li>
+        <li>Before switching platforms, tell your agent <strong>"memdump"</strong> — this saves current context to a file.</li>
+        <li>When you open the other platform, your agent reads the workspace files and picks up where you left off.</li>
+      </ol>
+
+      <div class="callout">
+        <strong>💡 Why it works this way</strong>
+        Separate session keys are intentional — you wouldn't want Telegram messages interleaved into your Uplink history. Workspace files are the bridge that carries context across all platforms. Conversation history is per-session. Workspace files are global.
+      </div>
+
       <h2>Watchdog Auto-Restart</h2>
       <p>Uplink includes a watchdog process monitor that automatically restarts the server if it crashes or becomes unresponsive. Ensures high availability for long-running deployments.</p>
       <ul>
