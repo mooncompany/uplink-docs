@@ -256,6 +256,98 @@ GATEWAY_URL=http://100.85.40.53:23248</code></pre>
       <h2>Crash Recovery</h2>
       <p>Uplink includes a built-in <strong>watchdog</strong> that automatically restarts the server if it crashes unexpectedly. If you notice Uplink went down and came back on its own, the watchdog handled it. Check the server logs for crash details — the watchdog logs restart events so you can investigate the root cause.</p>
 
+      <h2>Session Keys &amp; Multi-Platform</h2>
+
+      <h3>Why doesn't my agent remember what I said on Telegram/Discord?</h3>
+      <p>Each messaging platform gets its own <strong>session key</strong>, which means its own separate conversation history. Uplink uses the session key <code>agent:main:main</code>, which is shared with the OpenClaw Dashboard — so those two stay in sync. But Telegram, Discord, and other channels each have their own session keys and their own history.</p>
+      <p>This means your agent on Telegram has no idea what you said on Uplink, and vice versa.</p>
+
+      <p><strong>The fix: workspace memory files.</strong></p>
+      <p>Workspace files like <code>MEMORY.md</code> and <code>AGENTS.md</code> are injected into <em>every</em> session regardless of platform. If your agent writes progress and decisions to files instead of just keeping them in conversation context, switching platforms is seamless.</p>
+
+      <p><strong>Quick approach:</strong></p>
+      <ol>
+        <li>Tell your agent: <em>"After completing any task, write a summary to <code>memory/YYYY-MM-DD.md</code>. Always check memory files before answering questions about project status."</em></li>
+        <li>Before switching platforms, tell your agent: <em>"memdump"</em> — this saves current context to a file.</li>
+        <li>When you open the other platform, your agent reads the workspace files and picks up where you left off.</li>
+      </ol>
+
+      <div class="callout">
+        <strong>Why it works this way:</strong> Separate session keys are intentional. You wouldn't want your Telegram messages showing up in your Uplink history or vice versa — they're different interfaces with different message formats. Workspace files are the bridge that carries context across all of them.
+      </div>
+
+      <h3>How do satellite sessions work?</h3>
+      <p>Your primary Uplink chat uses the session key <code>agent:main:main</code> — the same key the OpenClaw Dashboard uses, so conversation history stays in sync between the two.</p>
+      <p>Satellite sessions (additional chat tabs in Uplink) get isolated keys like <code>agent:main:uplink:satellite:&lt;id&gt;</code>. Each satellite has its own conversation history, independent of the main session and each other.</p>
+
+      <h2>Artifacts Setup</h2>
+
+      <h3>How do I set up Artifacts?</h3>
+      <p>Artifacts is Uplink's built-in document viewer for agent-generated files — PRDs, reports, code, notes, anything your agent creates. It shows up as a panel you can browse, search, and read without leaving the chat.</p>
+
+      <p><strong>Where does it look for files?</strong></p>
+      <p>Uplink checks these locations in order and uses the first one it finds:</p>
+      <ol>
+        <li><code>ARTIFACTS_DIR</code> environment variable (if set)</li>
+        <li><code>artifacts/</code> in the parent directory of your Uplink install (the OpenClaw workspace)</li>
+        <li><code>artifacts/</code> inside the Uplink directory itself</li>
+      </ol>
+
+      <p><strong>Quick setup:</strong></p>
+      <p>Create an <code>artifacts/</code> folder in your OpenClaw workspace and tell your agent to use it:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>directory structure</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>workspace/
+├── openclaw.json
+├── AGENTS.md
+├── MEMORY.md
+├── artifacts/        ← agent writes docs here
+│   ├── prd.md
+│   ├── design-spec.md
+│   └── weekly-report.md
+└── uplink/
+    └── (uplink files)</code></pre>
+      </div>
+
+      <p>Then tell your agent:</p>
+      <blockquote>"When you create documents, reports, PRDs, or any reference files, save them to the <code>artifacts/</code> directory. Use descriptive filenames like <code>project-prd.md</code> or <code>api-design.md</code>."</blockquote>
+
+      <p>Or add it to your <code>AGENTS.md</code>:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>AGENTS.md</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>## Artifacts
+- Save all generated documents to `artifacts/`
+- Use descriptive filenames (e.g., `project-prd.md`, not `doc1.md`)
+- Supported formats: .md, .txt, .html, .json, .csv, .yml, .yaml, .xml, .log</code></pre>
+      </div>
+
+      <p><strong>Custom location:</strong></p>
+      <p>If you want artifacts stored somewhere else, set the <code>ARTIFACTS_DIR</code> environment variable:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>.env</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># In your .env or shell profile
+ARTIFACTS_DIR=/path/to/my/docs</code></pre>
+      </div>
+
+      <p><strong>What shows up in Artifacts?</strong></p>
+      <p>Only text-based files with these extensions: <code>.md</code>, <code>.txt</code>, <code>.html</code>, <code>.json</code>, <code>.csv</code>, <code>.yml</code>, <code>.yaml</code>, <code>.xml</code>, <code>.log</code>. Binary files, images, and other formats are excluded for security.</p>
+
+      <div class="callout">
+        <strong>Pro tip:</strong> Artifacts works great with the workspace memory pattern. Your agent writes a report to <code>artifacts/weekly-summary.md</code>, and you can read it from any platform — Uplink, Telegram, Discord — because it's a file, not a chat message.
+      </div>
+
       <h2>Getting Help</h2>
       <p>If none of the above resolves your issue:</p>
       <ol>
